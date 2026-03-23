@@ -1,6 +1,7 @@
 <?php
 $pageTitle = $pageTitle ?? 'Dentcoms | Admin';
 $pageContentFile = $pageContentFile ?? null;
+$activeNav = $activeNav ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,6 +70,25 @@ $pageContentFile = $pageContentFile ?? null;
   .sidebar-collapsed .sidebar-profile {
     display: none;
   }
+
+  @media print {
+    body {
+      background: #ffffff !important;
+      opacity: 1 !important;
+    }
+
+    #sidebar,
+    #mobileOpen,
+    #mobileOverlay {
+      display: none !important;
+    }
+
+    #contentCanvas {
+      margin-left: 0 !important;
+      padding-top: 0 !important;
+      background: #ffffff !important;
+    }
+  }
 </style>
 </head>
 <body class="min-h-screen antialiased">
@@ -127,7 +147,7 @@ $pageContentFile = $pageContentFile ?? null;
         <i data-feather="heart" class="h-5 w-5 text-slate-500"></i>
         <span class="sidebar-text">Treatments Plans</span>
       </a>
-      <a href="appointments.php" class="sidebar-link flex items-center gap-3.5 rounded-full px-3.5 py-3 text-[15px] font-normal text-black">
+      <a href="appointments.php" class="side  bar-link flex items-center gap-3.5 rounded-full px-3.5 py-3 text-[15px] font-normal text-black">
         <i data-feather="calendar" class="h-5 w-5 text-slate-500"></i>
         <span class="sidebar-text">Appointment Calendar</span>
       </a>
@@ -175,7 +195,7 @@ $pageContentFile = $pageContentFile ?? null;
       </a>
     <nav class="space-y-1.5">
       <a href="logout.php" class="sidebar-link flex items-center gap-3.5 rounded-full px-3.5 py-3 text-[15px] font-normal text-black">
-        <i data-feather="logout" class="h-5 w-5 text-slate-500"></i>
+        <i data-feather="log-out" class="h-5 w-5 text-slate-500"></i>
         <span class="sidebar-text">Logout</span>
       </a>
     </nav>
@@ -207,7 +227,7 @@ $pageContentFile = $pageContentFile ?? null;
   const sidebarStateKey = 'dentcoms-admin-sidebar-collapsed';
 
   function setActiveSidebarLink() {
-    const currentPath = window.location.pathname.split('/').pop() || 'dashboard.php';
+    const currentPath = <?= json_encode($activeNav) ?> || window.location.pathname.split('/').pop() || 'dashboard.php';
 
     sidebarLinks.forEach(link => {
       const linkPath = (link.getAttribute('href') || '').split('/').pop();

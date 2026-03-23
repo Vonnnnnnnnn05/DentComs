@@ -19,7 +19,7 @@ $encodedFormValues = htmlspecialchars(json_encode($formValues, JSON_HEX_TAG | JS
         <div>
           <p class="text-sm font-medium text-white/75">Patient Registry</p>
           <h1 class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Patients directory</h1>
-          <p class="mt-2 max-w-2xl text-sm text-white/80 sm:text-base">Responsive patient table with view, edit, delete, and map actions. For this PHP app, a direct form submit is still the right default over building an API first.</p>
+          <p class="mt-2 max-w-2xl text-sm text-white/80 sm:text-base">Responsive patient table with direct profile view, edit, delete, and map actions.</p>
         </div>
         <div class="flex flex-wrap gap-3">
           <div class="rounded-2xl bg-white/12 px-4 py-3 backdrop-blur">
@@ -53,7 +53,7 @@ $encodedFormValues = htmlspecialchars(json_encode($formValues, JSON_HEX_TAG | JS
       <div class="flex flex-col gap-3 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p class="text-sm font-semibold text-slate-900">Patients Table</p>
-          <p class="mt-1 text-sm text-slate-500">Each record supports quick view, edit, delete, and map lookup from the stored home address.</p>
+          <p class="mt-1 text-sm text-slate-500">Each record supports direct profile view, edit, delete, and map lookup from the stored home address.</p>
         </div>
       </div>
 
@@ -100,14 +100,13 @@ $encodedFormValues = htmlspecialchars(json_encode($formValues, JSON_HEX_TAG | JS
                   <td class="px-5 py-4"><?= htmlspecialchars($patient['email'] ?: '-', ENT_QUOTES, 'UTF-8') ?></td>
                   <td class="px-5 py-4">
                     <div class="flex min-w-[210px] items-center gap-2">
-                      <button
-                        type="button"
-                        class="view-patient-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                        data-patient="<?= $patientPayload ?>"
+                      <a
+                        href="view_profile.php?id=<?= urlencode($patient['id']) ?>"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
                         title="View patient"
                       >
                         <i data-feather="eye" class="h-4 w-4"></i>
-                      </button>
+                      </a>
                       <button
                         type="button"
                         class="edit-patient-btn inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
@@ -260,64 +259,13 @@ $encodedFormValues = htmlspecialchars(json_encode($formValues, JSON_HEX_TAG | JS
   </div>
 </div>
 
-<div id="patientViewModal" class="patient-modal fixed inset-0 z-[70] hidden items-center justify-center bg-slate-950/55 px-4 opacity-0 invisible">
-  <div class="absolute inset-0" data-close-patient-view-modal></div>
-  <div class="patient-modal-panel relative max-h-[88vh] w-full max-w-3xl translate-y-4 scale-[0.98] overflow-y-auto rounded-[28px] bg-white p-5 opacity-0 shadow-2xl ring-1 ring-slate-200 sm:p-6">
-    <button
-      type="button"
-      id="closePatientViewModal"
-      class="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
-      aria-label="Close patient view modal"
-    >
-      <i data-feather="x" class="h-5 w-5"></i>
-    </button>
-
-    <div class="mb-6 pr-10">
-      <p class="text-sm font-semibold uppercase tracking-[0.18em] text-blue-600">Patient Details</p>
-      <h2 id="viewPatientName" class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Patient Name</h2>
-      <p id="viewPatientMeta" class="mt-2 text-sm text-slate-500">Contact and profile details.</p>
-    </div>
-
-    <div class="grid gap-4 sm:grid-cols-[180px_1fr]">
-      <div class="rounded-[24px] border border-slate-100 bg-slate-50 p-4">
-        <div id="viewPhotoWrap" class="flex h-40 items-center justify-center overflow-hidden rounded-[20px] bg-white">
-          <img id="viewPatientPhoto" src="" alt="Patient photo" class="hidden h-full w-full object-cover">
-          <span id="viewPatientNoPhoto" class="text-sm font-medium text-slate-400">No photo</span>
-        </div>
-      </div>
-      <div class="grid gap-3 sm:grid-cols-2">
-        <div class="rounded-2xl bg-slate-50 p-4"><p class="text-xs uppercase tracking-[0.18em] text-slate-400">Registered</p><p id="viewDateRegistered" class="mt-2 text-sm font-semibold text-slate-900">-</p></div>
-        <div class="rounded-2xl bg-slate-50 p-4"><p class="text-xs uppercase tracking-[0.18em] text-slate-400">Birthday / Age</p><p id="viewBirthdayAge" class="mt-2 text-sm font-semibold text-slate-900">-</p></div>
-        <div class="rounded-2xl bg-slate-50 p-4"><p class="text-xs uppercase tracking-[0.18em] text-slate-400">Sex / Nationality</p><p id="viewSexNationality" class="mt-2 text-sm font-semibold text-slate-900">-</p></div>
-        <div class="rounded-2xl bg-slate-50 p-4"><p class="text-xs uppercase tracking-[0.18em] text-slate-400">Occupation</p><p id="viewOccupation" class="mt-2 text-sm font-semibold text-slate-900">-</p></div>
-        <div class="rounded-2xl bg-slate-50 p-4"><p class="text-xs uppercase tracking-[0.18em] text-slate-400">Mobile / Home Phone</p><p id="viewPhones" class="mt-2 text-sm font-semibold text-slate-900">-</p></div>
-        <div class="rounded-2xl bg-slate-50 p-4"><p class="text-xs uppercase tracking-[0.18em] text-slate-400">Email</p><p id="viewEmail" class="mt-2 text-sm font-semibold text-slate-900 break-all">-</p></div>
-      </div>
-    </div>
-
-    <div class="mt-4 grid gap-3 sm:grid-cols-2">
-      <div class="rounded-2xl bg-slate-50 p-4">
-        <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Home Address</p>
-        <p id="viewHomeAddress" class="mt-2 text-sm font-semibold text-slate-900">-</p>
-      </div>
-      <div class="rounded-2xl bg-slate-50 p-4">
-        <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Office Address</p>
-        <p id="viewOfficeAddress" class="mt-2 text-sm font-semibold text-slate-900">-</p>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
   (function() {
     const formModal = document.getElementById('patientFormModal');
     const formModalPanel = formModal?.querySelector('.patient-modal-panel');
-    const viewModal = document.getElementById('patientViewModal');
-    const viewModalPanel = viewModal?.querySelector('.patient-modal-panel');
     const openPatientModalBtn = document.getElementById('openPatientModal');
     const closePatientFormModalBtn = document.getElementById('closePatientFormModal');
     const cancelPatientFormModalBtn = document.getElementById('cancelPatientFormModal');
-    const closePatientViewModalBtn = document.getElementById('closePatientViewModal');
     const patientForm = document.getElementById('patientForm');
     const patientFormAction = document.getElementById('patientFormAction');
     const patientIdField = document.getElementById('patient_id');
@@ -325,10 +273,8 @@ $encodedFormValues = htmlspecialchars(json_encode($formValues, JSON_HEX_TAG | JS
     const patientFormTitle = document.getElementById('patientFormTitle');
     const patientFormSubmit = document.getElementById('patientFormSubmit');
     const patientPhotoHelper = document.getElementById('patientPhotoHelper');
-    const viewButtons = document.querySelectorAll('.view-patient-btn');
     const editButtons = document.querySelectorAll('.edit-patient-btn');
     let isFormModalClosing = false;
-    let isViewModalClosing = false;
 
     function openModal(modal, panel) {
       if (!modal) return;
@@ -404,53 +350,12 @@ $encodedFormValues = htmlspecialchars(json_encode($formValues, JSON_HEX_TAG | JS
       openModal(formModal, formModalPanel);
     }
 
-    function openPatientView(patient) {
-      document.getElementById('viewPatientName').textContent =
-        [patient.first_name, patient.middle_name, patient.last_name].filter(Boolean).join(' ') || 'Patient Name';
-      document.getElementById('viewPatientMeta').textContent =
-        [patient.nickname ? `Nickname: ${patient.nickname}` : '', patient.id ? `Record: ${patient.id}` : ''].filter(Boolean).join(' · ') || 'Patient profile details.';
-      document.getElementById('viewDateRegistered').textContent = patient.date_registered || '-';
-      document.getElementById('viewBirthdayAge').textContent = [patient.birthday || '-', patient.age ? `${patient.age} yrs` : ''].filter(Boolean).join(' · ');
-      document.getElementById('viewSexNationality').textContent = [patient.sex || '-', patient.nationality || '-'].join(' · ');
-      document.getElementById('viewOccupation').textContent = patient.occupation || '-';
-      document.getElementById('viewPhones').textContent = [patient.mobile_no || '-', patient.home_phone || '-'].join(' · ');
-      document.getElementById('viewEmail').textContent = patient.email || '-';
-      document.getElementById('viewHomeAddress').textContent = patient.home_address || '-';
-      document.getElementById('viewOfficeAddress').textContent = patient.office_address || '-';
-
-      const image = document.getElementById('viewPatientPhoto');
-      const emptyState = document.getElementById('viewPatientNoPhoto');
-      if (patient.photo) {
-        image.src = '../' + patient.photo.replace(/^\/+/, '');
-        image.classList.remove('hidden');
-        emptyState.classList.add('hidden');
-      } else {
-        image.src = '';
-        image.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-      }
-
-      openModal(viewModal, viewModalPanel);
-    }
-
     openPatientModalBtn?.addEventListener('click', openCreatePatientForm);
     closePatientFormModalBtn?.addEventListener('click', () => closeModal(formModal, formModalPanel, value => { isFormModalClosing = value; }));
     cancelPatientFormModalBtn?.addEventListener('click', () => closeModal(formModal, formModalPanel, value => { isFormModalClosing = value; }));
-    closePatientViewModalBtn?.addEventListener('click', () => closeModal(viewModal, viewModalPanel, value => { isViewModalClosing = value; }));
 
     formModal?.querySelectorAll('[data-close-patient-form-modal]').forEach(element => {
       element.addEventListener('click', () => closeModal(formModal, formModalPanel, value => { isFormModalClosing = value; }));
-    });
-
-    viewModal?.querySelectorAll('[data-close-patient-view-modal]').forEach(element => {
-      element.addEventListener('click', () => closeModal(viewModal, viewModalPanel, value => { isViewModalClosing = value; }));
-    });
-
-    viewButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const patient = JSON.parse(button.dataset.patient || '{}');
-        openPatientView(patient);
-      });
     });
 
     editButtons.forEach(button => {
@@ -461,13 +366,8 @@ $encodedFormValues = htmlspecialchars(json_encode($formValues, JSON_HEX_TAG | JS
     });
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        if (formModal && !formModal.classList.contains('hidden') && !isFormModalClosing) {
-          closeModal(formModal, formModalPanel, value => { isFormModalClosing = value; });
-        }
-        if (viewModal && !viewModal.classList.contains('hidden') && !isViewModalClosing) {
-          closeModal(viewModal, viewModalPanel, value => { isViewModalClosing = value; });
-        }
+      if (event.key === 'Escape' && formModal && !formModal.classList.contains('hidden') && !isFormModalClosing) {
+        closeModal(formModal, formModalPanel, value => { isFormModalClosing = value; });
       }
     });
 
