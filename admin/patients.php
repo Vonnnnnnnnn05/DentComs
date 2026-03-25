@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$existingPatient) {
             $errorMessage = 'Patient record not found.';
         } else {
-            $deleteStmt = mysqli_prepare($connection, 'DELETE FROM patients WHERE id = ?');
+            $deleteStmt = mysqli_prepare($conn, 'DELETE FROM patients WHERE id = ?');
             if ($deleteStmt) {
                 mysqli_stmt_bind_param($deleteStmt, 's', $patientId);
                 if (mysqli_stmt_execute($deleteStmt)) {
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header('Location: patients.php?status=deleted');
                     exit();
                 }
-                $errorMessage = 'Unable to delete patient. ' . mysqli_error($connection);
+                $errorMessage = 'Unable to delete patient. ' . mysqli_error($conn);
                 mysqli_stmt_close($deleteStmt);
             } else {
                 $errorMessage = 'Unable to prepare delete query.';
