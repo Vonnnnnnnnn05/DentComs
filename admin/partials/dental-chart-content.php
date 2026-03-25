@@ -309,10 +309,10 @@ foreach ($patientList as $item) {
   .dc-status-picker {
     position: fixed;
     z-index: 120;
-    width: min(320px, calc(100vw - 24px));
-    max-height: min(72vh, 560px);
+    width: min(240px, calc(100vw - 20px));
+    max-height: min(62vh, 420px);
     overflow: hidden;
-    border-radius: 18px;
+    border-radius: 12px;
     border: 1px solid #d7dee8;
     background: #f8fafc;
     box-shadow: 0 24px 48px -28px rgba(15, 23, 42, 0.55);
@@ -360,14 +360,14 @@ foreach ($patientList as $item) {
   .dc-status-picker-title {
     margin: 0;
     border-bottom: 1px solid #e2e8f0;
-    padding: 12px 16px;
-    font-size: 18px;
+    padding: 8px 10px;
+    font-size: 13px;
     font-weight: 700;
     color: #24496f;
   }
 
   .dc-status-picker-list {
-    max-height: min(64vh, 500px);
+    max-height: min(56vh, 360px);
     overflow: auto;
     background: #f8fafc;
   }
@@ -376,14 +376,14 @@ foreach ($patientList as $item) {
     display: flex;
     width: 100%;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     border: 0;
     border-bottom: 1px solid #e2e8f0;
     background: transparent;
-    padding: 12px 16px;
+    padding: 7px 10px;
     text-align: left;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 600;
     color: #24496f;
     cursor: pointer;
   }
@@ -393,8 +393,8 @@ foreach ($patientList as $item) {
   }
 
   .dc-status-option-dot {
-    width: 16px;
-    height: 16px;
+    width: 10px;
+    height: 10px;
     border-radius: 999px;
     border: 1px solid #cbd5e1;
     background: var(--dc-dot-color, #a4a4a4);
