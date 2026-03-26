@@ -610,6 +610,11 @@ $medicalHistoryConfig = [
               <form id="photoUploadForm" method="POST" action="photos.php?id=<?= urlencode($patient['id']) ?>" enctype="multipart/form-data" class="mb-6 rounded-[22px] border border-dashed border-slate-200 bg-slate-50/80 p-5">
                 <input type="hidden" name="action" value="upload_gallery_files">
                 <input id="galleryFilesInput" type="file" name="gallery_files[]" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,image/*,application/pdf" class="hidden">
+                <div class="mb-4">
+                  <label for="photoLabelInput" class="mb-2 block text-sm font-semibold text-slate-700">File label <span class="text-red-500">*</span></label>
+                  <input id="photoLabelInput" type="text" name="file_label" required maxlength="255" placeholder="Example: Initial Consultation" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none ring-0 transition focus:border-blue-300 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.15)]">
+                  <p class="mt-1 text-xs text-slate-500">Add a label before selecting files. The label is saved with this upload.</p>
+                </div>
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p class="text-sm font-semibold text-slate-800">Upload patient files</p>
@@ -645,6 +650,9 @@ $medicalHistoryConfig = [
                         <?php endif; ?>
                       </div>
                       <div class="flex min-w-0 flex-col justify-center space-y-3 px-5 py-5">
+                        <?php if (!empty($file['label'])): ?>
+                          <p class="text-sm font-medium text-blue-700">Label: <?= htmlspecialchars($file['label'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <?php endif; ?>
                         <p class="break-words text-base font-semibold text-slate-900"><?= htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8') ?></p>
                         <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500">
                           <span>Type: <?= htmlspecialchars(strtoupper($file['extension']), ENT_QUOTES, 'UTF-8') ?></span>
@@ -1165,12 +1173,22 @@ $medicalHistoryConfig = [
     (function () {
       const fileInput = document.getElementById('galleryFilesInput');
       const form = document.getElementById('photoUploadForm');
+      const labelInput = document.getElementById('photoLabelInput');
       const primaryTrigger = document.getElementById('photoAddTrigger');
       const secondaryTrigger = document.getElementById('photoSecondaryAddTrigger');
 
       if (!fileInput || !form) return;
 
+      function hasLabel() {
+        return !!(labelInput && labelInput.value.trim() !== '');
+      }
+
       function openPicker() {
+        if (!hasLabel()) {
+          window.alert('Please enter a file label before uploading.');
+          labelInput?.focus();
+          return;
+        }
         fileInput.click();
       }
 
@@ -1178,8 +1196,16 @@ $medicalHistoryConfig = [
       secondaryTrigger?.addEventListener('click', openPicker);
 
       fileInput.addEventListener('change', () => {
-        if (fileInput.files && fileInput.files.length > 0) {
+        if (fileInput.files && fileInput.files.length > 0 && hasLabel()) {
           form.submit();
+        }
+      });
+
+      form.addEventListener('submit', event => {
+        if (!hasLabel()) {
+          event.preventDefault();
+          window.alert('Please enter a file label before uploading.');
+          labelInput?.focus();
         }
       });
     })();

@@ -25,6 +25,7 @@ function patientFilesTableSql(): string
         patient_id VARCHAR(50) NOT NULL,
         file_name VARCHAR(255) NOT NULL,
         original_name VARCHAR(255) DEFAULT NULL,
+        file_label VARCHAR(255) DEFAULT NULL,
         file_path TEXT NOT NULL,
         file_type VARCHAR(50) DEFAULT NULL,
         file_size INT UNSIGNED DEFAULT NULL,
@@ -36,7 +37,25 @@ function patientFilesTableSql(): string
 
 function ensurePatientFilesTable(mysqli $conn): bool
 {
-    return mysqli_query($conn, patientFilesTableSql()) !== false;
+    if (mysqli_query($conn, patientFilesTableSql()) === false) {
+        return false;
+    }
+
+    $columnResult = mysqli_query($conn, "SHOW COLUMNS FROM patient_files LIKE 'file_label'");
+    if ($columnResult === false) {
+        return false;
+    }
+
+    $hasLabelColumn = mysqli_num_rows($columnResult) > 0;
+    mysqli_free_result($columnResult);
+
+    if (!$hasLabelColumn) {
+        if (mysqli_query($conn, "ALTER TABLE patient_files ADD COLUMN file_label VARCHAR(255) DEFAULT NULL AFTER original_name") === false) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function patientFormsTableSql(): string
@@ -485,7 +504,7 @@ function loadPatientFiles(mysqli $conn, string $patientId): array
     }
 
     $files = [];
-    $stmt = mysqli_prepare($conn, 'SELECT id, file_name, original_name, file_path, file_type, file_size, uploaded_at FROM patient_files WHERE patient_id = ? ORDER BY uploaded_at DESC, id DESC');
+    $stmt = mysqli_prepare($conn, 'SELECT id, file_name, original_name, file_label, file_path, file_type, file_size, uploaded_at FROM patient_files WHERE patient_id = ? ORDER BY uploaded_at DESC, id DESC');
     if (!$stmt) {
         return [];
     }
@@ -500,6 +519,7 @@ function loadPatientFiles(mysqli $conn, string $patientId): array
         $files[] = [
             'id' => (int) ($row['id'] ?? 0),
             'name' => $displayName,
+            'label' => trim((string) ($row['file_label'] ?? '')),
             'stored_name' => $row['file_name'],
             'path' => $row['file_path'],
             'extension' => $extension,
@@ -514,10 +534,17 @@ function loadPatientFiles(mysqli $conn, string $patientId): array
     return $files;
 }
 
-function uploadPatientFiles(mysqli $conn, array $files, string $patientId, string &$errorMessage): int
+function uploadPatientFiles(mysqli $conn, array $files, string $patientId, string $fileLabel, string &$errorMessage): int
 {
+    $fileLabel = trim($fileLabel);
+
     if ($patientId === '' || empty($files['name']) || !is_array($files['name'])) {
         $errorMessage = 'Select at least one file to upload.';
+        return 0;
+    }
+
+    if ($fileLabel === '') {
+        $errorMessage = 'Please add a label before uploading files.';
         return 0;
     }
 
@@ -571,14 +598,14 @@ function uploadPatientFiles(mysqli $conn, array $files, string $patientId, strin
             continue;
         }
 
-        $stmt = mysqli_prepare($conn, 'INSERT INTO patient_files (patient_id, file_name, original_name, file_path, file_type, file_size) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt = mysqli_prepare($conn, 'INSERT INTO patient_files (patient_id, file_name, original_name, file_label, file_path, file_type, file_size) VALUES (?, ?, ?, ?, ?, ?, ?)');
         if (!$stmt) {
             @unlink($targetPath);
             $errorMessage = 'Unable to save uploaded file metadata.';
             continue;
         }
 
-        mysqli_stmt_bind_param($stmt, 'sssssi', $patientId, $targetName, $originalName, $filePath, $fileType, $fileSize);
+        mysqli_stmt_bind_param($stmt, 'ssssssi', $patientId, $targetName, $originalName, $fileLabel, $filePath, $fileType, $fileSize);
         if (mysqli_stmt_execute($stmt)) {
             $uploadedCount++;
         } else {
@@ -743,7 +770,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $profileTab === 'appointments' && ($
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $profileTab === 'photos') {
     $action = $_POST['action'] ?? '';
     if ($action === 'upload_gallery_files') {
-        $uploadedCount = uploadPatientFiles($conn, $_FILES['gallery_files'] ?? [], $patientId, $profileErrorMessage);
+        $uploadedCount = uploadPatientFiles($conn, $_FILES['gallery_files'] ?? [], $patientId, (string) ($_POST['file_label'] ?? ''), $profileErrorMessage);
         if ($uploadedCount > 0) {
             header('Location: photos.php?id=' . urlencode($patientId) . '&upload_status=success&upload_count=' . $uploadedCount);
             exit();
