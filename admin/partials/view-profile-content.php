@@ -11,7 +11,6 @@ $tabs = [
     'medical_history' => ['label' => 'Medical History', 'href' => 'medical_history.php'],
     'progress_notes' => ['label' => 'Progress Notes', 'href' => 'progress_notes.php'],
     'Images' => ['label' => 'Images', 'href' => 'photos.php'],
-    'dental_chart' => ['label' => 'Dental Chart', 'href' => 'dental_chart_profile.php'],
     'forms' => ['label' => 'Forms', 'href' => 'forms_profile.php'],
     'lab_cases' => ['label' => 'Lab Cases', 'href' => 'lab_cases.php'],
     'appointments' => ['label' => 'Appointments', 'href' => 'appointments_profile.php'],

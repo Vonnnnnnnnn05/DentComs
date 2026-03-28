@@ -13,7 +13,7 @@ function formatPatientName(array $patient): string
 {
     $fullName = trim(
         (string) ($patient['first_name'] ?? '') . ' ' .
-        (string) ($patient['middle_name'] ?? '') . ' ' .
+             (string) ($patient['middle_name'] ?? '') . ' ' .
         (string) ($patient['last_name'] ?? '')
     );
 
