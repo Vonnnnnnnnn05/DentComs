@@ -57,6 +57,7 @@ if (!$hasTreatmentsTable || !$hasTreatmentServicesTable) {
 $successMessage = '';
 $errorMessage = '';
 $openTreatmentModal = false;
+$isViewTreatmentsPage = (string) ($_GET['view'] ?? '') === 'treatments';
 $treatmentFormValues = normalizeTreatmentInput($_POST);
 
 $patientDirectory = [];
@@ -220,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
                     treatment_date,
                     tooth_number,
                     description,
-                    item,
+                 
                     item_quantity,
                     appliances,
                     amount,
@@ -300,6 +301,14 @@ $patients = [];
 $selectedPatientId = trim((string) ($_GET['patient_id'] ?? $_GET['id'] ?? ''));
 $selectedPatientName = trim((string) ($_GET['patient_name'] ?? ''));
 $isPatientFiltered = (string) ($_GET['filtered'] ?? '') === '1';
+$allowedPerPage = [10, 20];
+$treatmentPerPage = (int) ($_GET['per_page'] ?? 10);
+if (!in_array($treatmentPerPage, $allowedPerPage, true)) {
+    $treatmentPerPage = 10;
+}
+$treatmentCurrentPage = max(1, (int) ($_GET['page'] ?? 1));
+$totalPatientTreatments = 0;
+$totalTreatmentPages = 1;
 $selectedPatient = null;
 $patientTreatments = [];
 
@@ -448,6 +457,30 @@ if (!$selectedPatient && $selectedPatientName !== '') {
 }
 
 if ($hasTreatmentsTable && ($selectedPatientId !== '' || $selectedPatientName !== '')) {
+    $countTreatmentsStmt = mysqli_prepare(
+        $conn,
+        'SELECT COUNT(*) AS total
+         FROM treatments t
+         WHERE (t.patient_id = ?)
+            OR (? <> "" AND (t.patient_id IS NULL OR t.patient_id = "") AND t.patient_name = ?)'
+    );
+
+    if ($countTreatmentsStmt) {
+        mysqli_stmt_bind_param($countTreatmentsStmt, 'sss', $selectedPatientId, $selectedPatientName, $selectedPatientName);
+        mysqli_stmt_execute($countTreatmentsStmt);
+        $countResult = mysqli_stmt_get_result($countTreatmentsStmt);
+        $countRow = $countResult ? mysqli_fetch_assoc($countResult) : null;
+        $totalPatientTreatments = (int) ($countRow['total'] ?? 0);
+        mysqli_stmt_close($countTreatmentsStmt);
+    }
+
+    if ($totalPatientTreatments > 0) {
+        $totalTreatmentPages = (int) ceil($totalPatientTreatments / $treatmentPerPage);
+        $treatmentCurrentPage = min($treatmentCurrentPage, $totalTreatmentPages);
+    }
+
+    $treatmentOffset = ($treatmentCurrentPage - 1) * $treatmentPerPage;
+
     $treatmentsStmt = mysqli_prepare(
         $conn,
         'SELECT
@@ -457,9 +490,6 @@ if ($hasTreatmentsTable && ($selectedPatientId !== '' || $selectedPatientName !=
             t.tooth_number,
             t.description,
             t.patient_name,
-            t.item,
-            t.item_quantity,
-            t.appliances,
             t.amount_charge,
             t.dentist,
             t.treatment_note,
@@ -473,11 +503,11 @@ if ($hasTreatmentsTable && ($selectedPatientId !== '' || $selectedPatientName !=
          WHERE (t.patient_id = ?)
             OR (? <> "" AND (t.patient_id IS NULL OR t.patient_id = "") AND t.patient_name = ?)
          ORDER BY t.treatment_date DESC, t.id DESC
-         LIMIT 500'
+            LIMIT ? OFFSET ?'
     );
 
     if ($treatmentsStmt) {
-        mysqli_stmt_bind_param($treatmentsStmt, 'sss', $selectedPatientId, $selectedPatientName, $selectedPatientName);
+          mysqli_stmt_bind_param($treatmentsStmt, 'sssii', $selectedPatientId, $selectedPatientName, $selectedPatientName, $treatmentPerPage, $treatmentOffset);
         mysqli_stmt_execute($treatmentsStmt);
         $result = mysqli_stmt_get_result($treatmentsStmt);
 
@@ -490,7 +520,9 @@ if ($hasTreatmentsTable && ($selectedPatientId !== '' || $selectedPatientName !=
 }
 
 $activeNav = 'treatments.php';
-$pageTitle = 'Dentcoms | Treatments Plans';
+$pageTitle = $isViewTreatmentsPage
+    ? 'Dentcoms | View Treatments'
+    : 'Dentcoms | Treatments Plans';
 $pageContentFile = __DIR__ . '/partials/treatments-content.php';
 
 include '../includes/adminsb.php';

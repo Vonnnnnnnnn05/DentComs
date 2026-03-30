@@ -3,6 +3,7 @@ include '../config/sessions.php';
 include '../config/conn.php';
 
 $patientId = trim((string) ($_GET['id'] ?? ''));
+$isViewDentalChartPage = (string) ($_GET['view'] ?? '') === 'dental-chart';
 $selectedPatient = null;
 $patientList = [];
 
@@ -35,7 +36,9 @@ if (!$selectedPatient) {
 }
 
 $activeNav = 'dental-chart.php';
-$pageTitle = 'Dentcoms | Dental Chart';
+$pageTitle = $isViewDentalChartPage
+	? 'Dentcoms | View Dental Chart'
+	: 'Dentcoms | Dental Chart';
 $pageContentFile = __DIR__ . '/partials/dental-chart-content.php';
 
 include '../includes/adminsb.php';

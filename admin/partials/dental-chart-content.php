@@ -79,12 +79,13 @@ foreach ($patientList as $item) {
 }
 ?>
 
-<section class="px-4 pb-8 pt-4 sm:px-6 md:px-8">
-  <div class="mx-auto max-w-[1500px]">
-    <div class="grid gap-4 xl:grid-cols-[410px_minmax(0,1fr)]">
+<section class="px-4 pb-10 pt-5 sm:px-6 md:px-8 lg:px-10">
+  <div class="mx-auto max-w-[1700px]">
+    <div class="grid gap-4 <?= $isViewDentalChartPage ? '' : 'xl:grid-cols-[410px_minmax(0,1fr)]' ?>">
+      <?php if (!$isViewDentalChartPage): ?>
       <aside class="space-y-4">
-        <div class="rounded-[22px] border border-white/70 bg-white p-4 shadow-[0_18px_42px_-30px_rgba(15,23,42,0.45)]">
-          <div class="rounded-[16px] bg-slate-300 h-24"></div>
+        <div class="rounded-[28px] border border-white/70 bg-white p-5 shadow-[0_20px_48px_-30px_rgba(15,23,42,0.45)]">
+          <div class="h-28 rounded-[20px] bg-slate-300"></div>
           <div class="-mt-9 flex justify-center">
             <div class="h-[96px] w-[96px] overflow-hidden rounded-full border-[5px] border-white bg-slate-200 shadow-md">
               <?php if ($patientPhoto !== ''): ?>
@@ -97,18 +98,18 @@ foreach ($patientList as $item) {
             </div>
           </div>
 
-          <div class="mt-3 text-center">
+          <div class="mt-4 text-center">
             <h2 class="text-3xl font-semibold tracking-tight text-slate-900"><?= htmlspecialchars($patientFullName, ENT_QUOTES, 'UTF-8') ?></h2>
             <p class="mt-1 text-sm font-semibold text-slate-700">ID: <?= htmlspecialchars((string) ($selectedPatient['id'] ?? '-'), ENT_QUOTES, 'UTF-8') ?></p>
             <p class="mt-2 text-sm text-slate-500"><?= htmlspecialchars((string) ($selectedPatient['occupation'] ?? 'No occupation'), ENT_QUOTES, 'UTF-8') ?></p>
           </div>
 
-          <form method="GET" action="dental-chart.php" class="mt-4">
-            <label for="dcPatientSearch" class="mb-1 block text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Select Patient</label>
+          <form method="GET" action="dental-chart.php" class="mt-5">
+            <label for="dcPatientSearch" class="mb-2 block text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Select Patient</label>
             <div class="relative flex gap-2">
-              <input id="dcPatientSearch" type="text" value="<?= htmlspecialchars($patientFullName, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search patient name..." class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-700" autocomplete="off">
+              <input id="dcPatientSearch" type="text" value="<?= htmlspecialchars($patientFullName, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search patient name..." class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-base text-slate-700" autocomplete="off">
               <input id="dcPatientIdInput" type="hidden" name="id" value="<?= htmlspecialchars((string) ($selectedPatient['id'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
-              <button type="submit" class="rounded-xl bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800">Load</button>
+              <button type="submit" class="rounded-2xl bg-blue-700 px-5 py-3 text-base font-semibold text-white hover:bg-blue-800">Load</button>
             </div>
             <div id="dcPatientResults" class="dc-patient-results hidden"></div>
             <script id="dcPatientData" type="application/json"><?= json_encode($patientSearchItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?></script>
@@ -138,17 +139,40 @@ foreach ($patientList as $item) {
           </div>
         </div>
       </aside>
+      <?php endif; ?>
 
-      <div class="rounded-[26px] border border-white/70 bg-white/95 p-4 shadow-[0_22px_54px_-36px_rgba(15,23,42,0.42)] sm:p-6">
+      <div class="rounded-[34px] border border-white/70 bg-white/95 p-5 shadow-[0_24px_60px_-36px_rgba(15,23,42,0.42)] sm:p-7 <?= $isViewDentalChartPage ? 'dc-view-page' : '' ?>">
         <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">PDA Dental Chart</h1>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-900"><?= $isViewDentalChartPage ? 'View Dental Chart' : 'PDA Dental Chart' ?></h1>
             <p class="mt-1 text-sm text-slate-500">Clickable odontogram with color variations for charting.</p>
           </div>
-          <button id="dcResetAll" type="button" class="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700">
-            <i data-feather="rotate-ccw" class="h-4 w-4"></i>
-            Reset All
-          </button>
+          <div class="flex items-center gap-2">
+            <?php if ($isViewDentalChartPage): ?>
+              <a
+                href="dental-chart.php?id=<?= urlencode((string) ($selectedPatient['id'] ?? '')) ?>"
+                class="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                title="Back to dental chart"
+              >
+                <i data-feather="arrow-left" class="h-4 w-4"></i>
+                Back
+              </a>
+            <?php else: ?>
+              <a
+                href="dental-chart.php?view=dental-chart&id=<?= urlencode((string) ($selectedPatient['id'] ?? '')) ?>"
+                class="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                title="View dental chart"
+              >
+                <i data-feather="maximize-2" class="h-4 w-4"></i>
+                View Dental Chart
+              </a>
+            <?php endif; ?>
+
+            <button id="dcResetAll" type="button" class="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700">
+              <i data-feather="rotate-ccw" class="h-4 w-4"></i>
+              Reset All
+            </button>
+          </div>
         </div>
 
         <div class="dc-chart-shell" data-chart-key="dentcoms_dental_chart_state_<?= htmlspecialchars((string) ($selectedPatient['id'] ?? 'default'), ENT_QUOTES, 'UTF-8') ?>">
@@ -174,7 +198,7 @@ foreach ($patientList as $item) {
           </div>
         </div>
 
-        <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+        <div class="mt-7 rounded-[26px] border border-slate-200 bg-white p-5">
           <p class="text-[22px] font-semibold text-slate-800">Dental Chart Legend</p>
           <div class="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
             <?php foreach ($chartStatuses as $statusMeta): ?>
@@ -193,19 +217,23 @@ foreach ($patientList as $item) {
 <style>
   .dc-chart-shell {
     overflow-x: auto;
-    border-radius: 20px;
+    border-radius: 30px;
     border: 1px solid #e2e8f0;
     background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
-    padding: 12px;
+    padding: 20px;
+  }
+
+  .dc-view-page .dc-chart-shell {
+    min-height: calc(100vh - 270px);
   }
 
   .dc-arch-label {
-    margin: 8px auto 10px;
+    margin: 12px auto 14px;
     width: fit-content;
     border-radius: 999px;
     background: #eef2f7;
-    padding: 3px 12px;
-    font-size: 18px;
+    padding: 7px 16px;
+    font-size: 22px;
     font-weight: 600;
     color: #64748b;
   }
@@ -213,25 +241,25 @@ foreach ($patientList as $item) {
   .dc-row {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: minmax(34px, 1fr);
-    gap: 5px;
+    grid-auto-columns: minmax(48px, 1fr);
+    gap: 8px;
     align-items: end;
-    margin-bottom: 10px;
-    min-width: 760px;
+    margin-bottom: 14px;
+    min-width: 1020px;
   }
 
   .dc-mid-gap {
-    width: 14px;
+    width: 24px;
   }
 
   .dc-tooth {
     display: grid;
-    gap: 4px;
+    gap: 7px;
     justify-items: center;
-    border-radius: 10px;
+    border-radius: 16px;
     border: 1px solid transparent;
     background: transparent;
-    padding: 3px 1px 4px;
+    padding: 5px 3px 6px;
     transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
   }
 
@@ -242,50 +270,85 @@ foreach ($patientList as $item) {
   }
 
   .dc-tooth-number {
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1;
-    color: #334155;
+    color: #475569;
   }
 
   .dc-tooth-icon {
     position: relative;
-    display: grid;
-    grid-template-columns: 8px 12px 8px;
-    grid-template-rows: 6px 12px 6px;
-    gap: 1px;
-    width: 30px;
-    height: 24px;
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    border: 1px solid #9aa6b2;
+    background: #ffffff;
   }
 
   .dc-surface {
+    position: absolute;
     border-radius: 999px;
-    border: 1px solid #d5d9e1;
-    background: #a4a4a4;
+    border: 1px solid #9aa6b2;
+    background: #ffffff;
     cursor: pointer;
-    transition: transform 120ms ease, box-shadow 120ms ease, background-color 150ms ease;
+    transition: box-shadow 120ms ease, background-color 150ms ease, border-color 150ms ease;
   }
 
   .dc-surface:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.22);
   }
 
-  .dc-surface-t { grid-column: 2; grid-row: 1; }
-  .dc-surface-l { grid-column: 1; grid-row: 2; }
-  .dc-surface-c { grid-column: 2; grid-row: 2; border-radius: 4px; }
-  .dc-surface-r { grid-column: 3; grid-row: 2; }
-  .dc-surface-b { grid-column: 2; grid-row: 3; }
+  .dc-surface-t {
+    top: 4px;
+    left: 50%;
+    width: 14px;
+    height: 11px;
+    transform: translateX(-50%);
+  }
+
+  .dc-surface-l {
+    top: 50%;
+    left: 4px;
+    width: 11px;
+    height: 14px;
+    transform: translateY(-50%);
+  }
+
+  .dc-surface-c {
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    transform: translate(-50%, -50%);
+  }
+
+  .dc-surface-r {
+    top: 50%;
+    right: 4px;
+    width: 11px;
+    height: 14px;
+    transform: translateY(-50%);
+  }
+
+  .dc-surface-b {
+    bottom: 4px;
+    left: 50%;
+    width: 14px;
+    height: 11px;
+    transform: translateX(-50%);
+  }
 
   .dc-surface-l,
   .dc-surface-r {
-    height: 12px;
-    align-self: center;
+    border-radius: 10px;
   }
 
   .dc-surface-t,
   .dc-surface-b {
-    width: 12px;
-    justify-self: center;
+    border-radius: 10px;
+  }
+
+  .dc-surface-c {
+    border-radius: 6px;
   }
 
   .dc-surface[data-status='decayed'] { background: #ff2d2d; }
@@ -304,15 +367,18 @@ foreach ($patientList as $item) {
   .dc-surface[data-status='impacted'] { background: #8f7c3b; }
   .dc-surface[data-status='unerupted'] { background: #efd9b5; }
   .dc-surface[data-status='root_canal_treated'] { background: #2ea8a1; }
-  .dc-surface[data-status='healthy'] { background: #a4a4a4; }
+  .dc-surface[data-status='healthy'] {
+    background: #ffffff;
+    border-color: #9aa6b2;
+  }
 
   .dc-status-picker {
     position: fixed;
     z-index: 120;
-    width: min(240px, calc(100vw - 20px));
-    max-height: min(62vh, 420px);
+    width: min(360px, calc(100vw - 20px));
+    max-height: min(72vh, 620px);
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 18px;
     border: 1px solid #d7dee8;
     background: #f8fafc;
     box-shadow: 0 24px 48px -28px rgba(15, 23, 42, 0.55);
@@ -337,9 +403,9 @@ foreach ($patientList as $item) {
     border: 0;
     border-bottom: 1px solid #e2e8f0;
     background: #ffffff;
-    padding: 10px 12px;
+    padding: 12px 14px;
     text-align: left;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: #334155;
     cursor: pointer;
@@ -360,14 +426,14 @@ foreach ($patientList as $item) {
   .dc-status-picker-title {
     margin: 0;
     border-bottom: 1px solid #e2e8f0;
-    padding: 8px 10px;
-    font-size: 13px;
+    padding: 14px 16px;
+    font-size: 24px;
     font-weight: 700;
     color: #24496f;
   }
 
   .dc-status-picker-list {
-    max-height: min(56vh, 360px);
+    max-height: min(62vh, 520px);
     overflow: auto;
     background: #f8fafc;
   }
@@ -376,13 +442,13 @@ foreach ($patientList as $item) {
     display: flex;
     width: 100%;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     border: 0;
     border-bottom: 1px solid #e2e8f0;
     background: transparent;
-    padding: 7px 10px;
+    padding: 14px 16px;
     text-align: left;
-    font-size: 13px;
+    font-size: 20px;
     font-weight: 600;
     color: #24496f;
     cursor: pointer;
@@ -393,8 +459,8 @@ foreach ($patientList as $item) {
   }
 
   .dc-status-option-dot {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     border-radius: 999px;
     border: 1px solid #cbd5e1;
     background: var(--dc-dot-color, #a4a4a4);
@@ -405,13 +471,13 @@ foreach ($patientList as $item) {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: 16px;
+    font-size: 17px;
     color: #334155;
   }
 
   .dc-dot {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     border-radius: 999px;
     border: 1px solid #d1d5db;
     background: var(--dc-dot-color, #a4a4a4);
@@ -419,19 +485,19 @@ foreach ($patientList as $item) {
 
   @media (max-width: 768px) {
     .dc-arch-label {
-      font-size: 14px;
+      font-size: 16px;
     }
 
     .dc-tooth-number {
-      font-size: 14px;
+      font-size: 15px;
     }
 
     .dc-chart-shell {
-      padding: 10px;
+      padding: 12px;
     }
 
     .dc-row {
-      min-width: 660px;
+      min-width: 840px;
     }
   }
 </style>

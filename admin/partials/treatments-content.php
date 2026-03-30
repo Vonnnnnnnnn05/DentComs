@@ -7,6 +7,17 @@ if ($selectedPatientName === '' && $selectedPatient) {
   $selectedPatientName = (string) ($selectedPatient['display_name'] ?? $selectedPatient['id'] ?? 'Unknown Patient');
 }
 
+$queryBase = [
+    'patient_id' => (string) $selectedPatientId,
+    'patient_name' => (string) $selectedPatientName,
+    'filtered' => isset($_GET['filtered']) ? (string) $_GET['filtered'] : '0',
+    'per_page' => (string) $treatmentPerPage,
+];
+
+if ($isViewTreatmentsPage) {
+    $queryBase['view'] = 'treatments';
+}
+
 function treatmentStatusClass(string $status): string
 {
     $normalized = strtolower(trim($status));
@@ -28,53 +39,13 @@ function treatmentStatusClass(string $status): string
 ?>
 
 <style>
-  body.treatment-expand-open {
-    overflow: hidden;
-  }
-
-  .treatment-expand-backdrop {
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 260ms ease;
-  }
-
-  .treatment-expand-backdrop.is-visible {
-    pointer-events: auto;
-    opacity: 1;
-  }
-
-  .treatment-list-card {
-    position: relative;
-    will-change: transform;
-  }
-
   .treatment-list-card .treatment-table-scroll {
     max-height: 68vh;
     transition: max-height 300ms ease;
   }
 
-  .treatment-list-card.is-expanded {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    bottom: 16px;
-    left: 16px;
-    z-index: 88;
-    border-radius: 18px;
-    box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.45);
-  }
-
-  .treatment-list-card.is-expanded .treatment-table-scroll {
+  .treatment-list-card.is-view-page .treatment-table-scroll {
     max-height: calc(100vh - 140px);
-  }
-
-  @media (max-width: 640px) {
-    .treatment-list-card.is-expanded {
-      top: 8px;
-      right: 8px;
-      bottom: 8px;
-      left: 8px;
-    }
   }
 </style>
 
@@ -103,7 +74,8 @@ function treatmentStatusClass(string $status): string
       </div>
     <?php endif; ?>
 
-    <div id="treatmentsLayoutGrid" class="treatments-layout-grid grid grid-cols-1 gap-3 xl:grid-cols-[330px_minmax(0,1fr)]">
+    <div id="treatmentsLayoutGrid" class="treatments-layout-grid grid grid-cols-1 gap-3 <?= $isViewTreatmentsPage ? '' : 'xl:grid-cols-[330px_minmax(0,1fr)]' ?>">
+      <?php if (!$isViewTreatmentsPage): ?>
       <div id="treatmentsLeftPane" class="treatments-left-pane">
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
@@ -265,17 +237,28 @@ function treatmentStatusClass(string $status): string
           </div>
         </div>
       </div>
+      <?php endif; ?>
 
       <div>
-        <div id="treatmentListCard" class="treatment-list-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div id="treatmentListCard" class="treatment-list-card <?= $isViewTreatmentsPage ? 'is-view-page' : '' ?> overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <div>
-              <h2 class="text-[20px] font-medium text-slate-800">Treatment List</h2>
+              <h2 class="text-[20px] font-medium text-slate-800"><?= $isViewTreatmentsPage ? 'View Treatments' : 'Treatment List' ?></h2>
               <?php if ($selectedPatientName !== ''): ?>
                 <p class="text-sm text-slate-500">Showing records for <?= htmlspecialchars($selectedPatientName, ENT_QUOTES, 'UTF-8') ?></p>
               <?php endif; ?>
             </div>
             <div class="flex items-center gap-2">
+              <?php if ($isViewTreatmentsPage): ?>
+                <a
+                  href="treatments.php?<?= htmlspecialchars(http_build_query(['patient_id' => (string) $selectedPatientId, 'patient_name' => (string) $selectedPatientName, 'filtered' => isset($_GET['filtered']) ? (string) $_GET['filtered'] : '0', 'per_page' => (string) $treatmentPerPage]), ENT_QUOTES, 'UTF-8') ?>"
+                  class="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  title="Back to treatments"
+                >
+                  <i data-feather="arrow-left" class="h-4 w-4"></i>
+                  Back
+                </a>
+              <?php endif; ?>
               <button id="openTreatmentModalBtn" type="button" class="inline-flex items-center gap-2 rounded-lg bg-[#2f89dc] px-4 py-2 text-lg font-semibold text-white transition hover:bg-[#2478c4]" title="Add treatment">
                 <i data-feather="plus" class="h-4 w-4"></i>
                 Add
@@ -283,9 +266,15 @@ function treatmentStatusClass(string $status): string
               <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500" title="Filter">
                 <i data-feather="filter" class="h-4 w-4"></i>
               </button>
-              <button id="treatmentExpandBtn" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500" title="Expand" aria-pressed="false">
-                <i data-feather="maximize-2" class="h-4 w-4"></i>
-              </button>
+              <?php if (!$isViewTreatmentsPage): ?>
+                <a
+                  href="treatments.php?<?= htmlspecialchars(http_build_query(array_merge($queryBase, ['view' => 'treatments', 'page' => 1])), ENT_QUOTES, 'UTF-8') ?>"
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50"
+                  title="View treatments"
+                >
+                  <i data-feather="maximize-2" class="h-4 w-4"></i>
+                </a>
+              <?php endif; ?>
             </div>
           </div>
 
@@ -295,9 +284,6 @@ function treatmentStatusClass(string $status): string
                 <tr>
                   <th class="px-4 py-3">Category</th>
                   <th class="px-4 py-3">Treatment Name</th>
-                  <th class="px-4 py-3">Item</th>
-                  <th class="px-4 py-3">Item Quantity</th>
-                  <th class="px-4 py-3">Appliances</th>
                   <th class="px-4 py-3">Treatment Date</th>
                   <th class="px-4 py-3">Tooth Number</th>
                   <th class="px-4 py-3">Description</th>
@@ -312,11 +298,11 @@ function treatmentStatusClass(string $status): string
               <tbody class="divide-y divide-slate-100 text-[15px] text-slate-700">
                 <?php if (!$selectedPatient): ?>
                   <tr>
-                    <td colspan="14" class="px-4 py-10 text-center text-sm text-slate-400">Select a patient to see treatments.</td>
+                    <td colspan="11" class="px-4 py-10 text-center text-sm text-slate-400">Select a patient to see treatments.</td>
                   </tr>
                 <?php elseif (empty($patientTreatments)): ?>
                   <tr>
-                    <td colspan="14" class="px-4 py-10 text-center text-sm text-slate-400">No treatments found for this patient.</td>
+                    <td colspan="11" class="px-4 py-10 text-center text-sm text-slate-400">No treatments found for this patient.</td>
                   </tr>
                 <?php else: ?>
                   <?php foreach ($patientTreatments as $row): ?>
@@ -325,9 +311,6 @@ function treatmentStatusClass(string $status): string
                     $serviceName = trim((string) ($row['service_name'] ?? ''));
                     $status = (string) ($row['status'] ?? 'Scheduled');
                     $statusClass = treatmentStatusClass($status);
-                    $item = trim((string) ($row['item'] ?? ''));
-                    $qty = (int) ($row['item_quantity'] ?? 0);
-                    $appliances = trim((string) ($row['appliances'] ?? ''));
                     $dateValue = trim((string) ($row['treatment_date'] ?? ''));
                     $toothNumber = trim((string) ($row['tooth_number'] ?? ''));
                     $description = trim((string) ($row['description'] ?? ''));
@@ -347,13 +330,6 @@ function treatmentStatusClass(string $status): string
                       </td>
                       <td class="max-w-[340px] truncate px-4 py-3 font-medium text-slate-800" title="<?= htmlspecialchars($serviceName, ENT_QUOTES, 'UTF-8') ?>">
                         <?= htmlspecialchars($serviceName !== '' ? $serviceName : '-', ENT_QUOTES, 'UTF-8') ?>
-                      </td>
-                      <td class="max-w-[180px] truncate px-4 py-3" title="<?= htmlspecialchars($item, ENT_QUOTES, 'UTF-8') ?>">
-                        <?= htmlspecialchars($item !== '' ? $item : '-', ENT_QUOTES, 'UTF-8') ?>
-                      </td>
-                      <td class="px-4 py-3 text-center"><?= $qty > 0 ? $qty : '-' ?></td>
-                      <td class="max-w-[200px] truncate px-4 py-3" title="<?= htmlspecialchars($appliances, ENT_QUOTES, 'UTF-8') ?>">
-                        <?= htmlspecialchars($appliances !== '' ? $appliances : '-', ENT_QUOTES, 'UTF-8') ?>
                       </td>
                       <td class="px-4 py-3"><?= htmlspecialchars($dateValue !== '' ? date('n/j/Y', strtotime($dateValue)) : '-', ENT_QUOTES, 'UTF-8') ?></td>
                       <td class="px-4 py-3"><?= htmlspecialchars($toothNumber !== '' ? $toothNumber : '-', ENT_QUOTES, 'UTF-8') ?></td>
@@ -382,13 +358,55 @@ function treatmentStatusClass(string $status): string
               </tbody>
             </table>
           </div>
+
+          <?php if (($selectedPatientId !== '' || $selectedPatientName !== '') && $totalPatientTreatments > 0): ?>
+            <?php
+            $prevPage = max(1, $treatmentCurrentPage - 1);
+            $nextPage = min($totalTreatmentPages, $treatmentCurrentPage + 1);
+            $showingStart = (($treatmentCurrentPage - 1) * $treatmentPerPage) + 1;
+            $showingEnd = min($totalPatientTreatments, $treatmentCurrentPage * $treatmentPerPage);
+            ?>
+            <div class="flex flex-col gap-3 border-t border-slate-200 px-4 py-3 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
+              <div class="flex items-center gap-2">
+                <span>Rows per page</span>
+                <form method="GET" action="treatments.php" class="inline-flex items-center gap-2">
+                  <input type="hidden" name="patient_id" value="<?= htmlspecialchars((string) $selectedPatientId, ENT_QUOTES, 'UTF-8') ?>">
+                  <input type="hidden" name="patient_name" value="<?= htmlspecialchars((string) $selectedPatientName, ENT_QUOTES, 'UTF-8') ?>">
+                  <input type="hidden" name="filtered" value="<?= htmlspecialchars(isset($_GET['filtered']) ? (string) $_GET['filtered'] : '0', ENT_QUOTES, 'UTF-8') ?>">
+                  <?php if ($isViewTreatmentsPage): ?>
+                    <input type="hidden" name="view" value="treatments">
+                  <?php endif; ?>
+                  <input type="hidden" name="page" value="1">
+                  <select name="per_page" class="h-8 rounded-md border border-slate-300 px-2 text-sm text-slate-800" onchange="this.form.submit()">
+                    <option value="10" <?= $treatmentPerPage === 10 ? 'selected' : '' ?>>10</option>
+                    <option value="20" <?= $treatmentPerPage === 20 ? 'selected' : '' ?>>20</option>
+                  </select>
+                </form>
+                <span>Showing <?= $showingStart ?>-<?= $showingEnd ?> of <?= (int) $totalPatientTreatments ?></span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <a
+                  href="treatments.php?<?= htmlspecialchars(http_build_query(array_merge($queryBase, ['page' => $prevPage])), ENT_QUOTES, 'UTF-8') ?>"
+                  class="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium <?= $treatmentCurrentPage <= 1 ? 'pointer-events-none opacity-50' : 'hover:bg-slate-50' ?>"
+                >
+                  Previous
+                </a>
+                <span>Page <?= (int) $treatmentCurrentPage ?> of <?= (int) $totalTreatmentPages ?></span>
+                <a
+                  href="treatments.php?<?= htmlspecialchars(http_build_query(array_merge($queryBase, ['page' => $nextPage])), ENT_QUOTES, 'UTF-8') ?>"
+                  class="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium <?= $treatmentCurrentPage >= $totalTreatmentPages ? 'pointer-events-none opacity-50' : 'hover:bg-slate-50' ?>"
+                >
+                  Next
+                </a>
+              </div>
+            </div>
+          <?php endif; ?>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<div id="treatmentExpandBackdrop" class="treatment-expand-backdrop fixed inset-0 z-[87] bg-slate-950/35 backdrop-blur-[2px]"></div>
 
 <div id="treatmentModal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-slate-950/55 px-4 py-4">
   <div class="absolute inset-0" data-close-treatment-modal></div>
@@ -581,95 +599,7 @@ function treatmentStatusClass(string $status): string
     const patientLoadName = document.getElementById('patientLoadName');
     const patientSearchList = document.getElementById('patientSearchList');
     const patientSearchSuggestions = document.getElementById('patientSearchSuggestions');
-    const treatmentListCard = document.getElementById('treatmentListCard');
-    const treatmentExpandBackdrop = document.getElementById('treatmentExpandBackdrop');
-    const treatmentExpandBtn = document.getElementById('treatmentExpandBtn');
-    let isTreatmentExpanded = false;
     let activeSuggestionIndex = -1;
-
-    function syncExpandButtonState(isExpanded) {
-      if (!treatmentExpandBtn) return;
-
-      treatmentExpandBtn.setAttribute('aria-pressed', isExpanded ? 'true' : 'false');
-      treatmentExpandBtn.setAttribute('title', isExpanded ? 'Collapse' : 'Expand');
-
-      const icon = treatmentExpandBtn.querySelector('i[data-feather]');
-      if (icon) {
-        icon.setAttribute('data-feather', isExpanded ? 'minimize-2' : 'maximize-2');
-        if (window.feather && typeof window.feather.replace === 'function') {
-          window.feather.replace();
-        }
-      }
-    }
-
-    function animateTreatmentCard(expand) {
-      if (!treatmentListCard) return;
-
-      const firstRect = treatmentListCard.getBoundingClientRect();
-
-      treatmentListCard.classList.toggle('is-expanded', expand);
-      document.body.classList.toggle('treatment-expand-open', expand);
-
-      if (treatmentExpandBackdrop) {
-        treatmentExpandBackdrop.classList.toggle('is-visible', expand);
-      }
-
-      const lastRect = treatmentListCard.getBoundingClientRect();
-
-      const deltaX = firstRect.left - lastRect.left;
-      const deltaY = firstRect.top - lastRect.top;
-      const scaleX = firstRect.width / Math.max(lastRect.width, 1);
-      const scaleY = firstRect.height / Math.max(lastRect.height, 1);
-
-      treatmentListCard.animate(
-        [
-          {
-            transformOrigin: 'top left',
-            transform: `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`
-          },
-          {
-            transformOrigin: 'top left',
-            transform: 'translate(0, 0) scale(1, 1)'
-          }
-        ],
-        {
-          duration: 320,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
-        }
-      );
-
-      isTreatmentExpanded = expand;
-      syncExpandButtonState(expand);
-    }
-
-    function initTreatmentExpandControl() {
-      if (!treatmentExpandBtn || !treatmentListCard) return;
-
-      syncExpandButtonState(false);
-
-      treatmentExpandBtn.addEventListener('click', () => {
-        animateTreatmentCard(!isTreatmentExpanded);
-      });
-
-      if (treatmentExpandBackdrop) {
-        treatmentExpandBackdrop.addEventListener('click', () => {
-          if (!isTreatmentExpanded) return;
-          animateTreatmentCard(false);
-        });
-      }
-
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && isTreatmentExpanded) {
-          animateTreatmentCard(false);
-        }
-      });
-
-      window.addEventListener('resize', () => {
-        if (isTreatmentExpanded) {
-          syncExpandButtonState(true);
-        }
-      });
-    }
 
     function getPatientOptions() {
       if (!patientSearchList) return [];
@@ -890,7 +820,6 @@ function treatmentStatusClass(string $status): string
 
     updateServiceOptions();
     syncCategoryAndToothRule();
-    initTreatmentExpandControl();
 
     const shouldAutoOpen = <?= $openTreatmentModal ? 'true' : 'false' ?>;
     if (shouldAutoOpen) {
