@@ -27,6 +27,57 @@ function treatmentStatusClass(string $status): string
 }
 ?>
 
+<style>
+  body.treatment-expand-open {
+    overflow: hidden;
+  }
+
+  .treatment-expand-backdrop {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 260ms ease;
+  }
+
+  .treatment-expand-backdrop.is-visible {
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  .treatment-list-card {
+    position: relative;
+    will-change: transform;
+  }
+
+  .treatment-list-card .treatment-table-scroll {
+    max-height: 68vh;
+    transition: max-height 300ms ease;
+  }
+
+  .treatment-list-card.is-expanded {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    z-index: 88;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.45);
+  }
+
+  .treatment-list-card.is-expanded .treatment-table-scroll {
+    max-height: calc(100vh - 140px);
+  }
+
+  @media (max-width: 640px) {
+    .treatment-list-card.is-expanded {
+      top: 8px;
+      right: 8px;
+      bottom: 8px;
+      left: 8px;
+    }
+  }
+</style>
+
 <section class="px-3 pb-6 pt-3 sm:px-4 lg:px-5 lg:pt-5">
   <div class="mx-auto max-w-[1700px]">
     <div class="mb-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
@@ -52,8 +103,8 @@ function treatmentStatusClass(string $status): string
       </div>
     <?php endif; ?>
 
-    <div class="grid grid-cols-1 gap-3 xl:grid-cols-[330px_minmax(0,1fr)]">
-      <div>
+    <div id="treatmentsLayoutGrid" class="treatments-layout-grid grid grid-cols-1 gap-3 xl:grid-cols-[330px_minmax(0,1fr)]">
+      <div id="treatmentsLeftPane" class="treatments-left-pane">
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <h2 class="text-[16px] font-medium text-slate-800">Patient Name</h2>
@@ -63,15 +114,10 @@ function treatmentStatusClass(string $status): string
                 class="inline-flex items-center gap-1.5 rounded-lg bg-[#2f89dc] px-3 py-1.5 text-base font-semibold text-white transition hover:bg-[#2478c4]"
                 title="Add patient"
               >
-                <i data-feather="plus" class="h-4 w-4"></i>
+                <i data-feather="plus" class="h-4 w-7"></i>
                 Add
               </a>
-              <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500" title="Filter">
-                <i data-feather="filter" class="h-4 w-4"></i>
-              </button>
-              <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500" title="Expand">
-                <i data-feather="maximize-2" class="h-4 w-4"></i>
-              </button>
+              
             </div>
           </div>
 
@@ -221,7 +267,7 @@ function treatmentStatusClass(string $status): string
       </div>
 
       <div>
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div id="treatmentListCard" class="treatment-list-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <div>
               <h2 class="text-[20px] font-medium text-slate-800">Treatment List</h2>
@@ -237,13 +283,13 @@ function treatmentStatusClass(string $status): string
               <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500" title="Filter">
                 <i data-feather="filter" class="h-4 w-4"></i>
               </button>
-              <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500" title="Expand">
+              <button id="treatmentExpandBtn" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500" title="Expand" aria-pressed="false">
                 <i data-feather="maximize-2" class="h-4 w-4"></i>
               </button>
             </div>
           </div>
 
-          <div class="max-h-[68vh] overflow-auto">
+          <div class="treatment-table-scroll overflow-auto">
             <table class="min-w-full text-left">
               <thead class="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 text-sm font-semibold text-slate-700">
                 <tr>
@@ -341,6 +387,8 @@ function treatmentStatusClass(string $status): string
     </div>
   </div>
 </section>
+
+<div id="treatmentExpandBackdrop" class="treatment-expand-backdrop fixed inset-0 z-[87] bg-slate-950/35 backdrop-blur-[2px]"></div>
 
 <div id="treatmentModal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-slate-950/55 px-4 py-4">
   <div class="absolute inset-0" data-close-treatment-modal></div>
@@ -533,7 +581,95 @@ function treatmentStatusClass(string $status): string
     const patientLoadName = document.getElementById('patientLoadName');
     const patientSearchList = document.getElementById('patientSearchList');
     const patientSearchSuggestions = document.getElementById('patientSearchSuggestions');
+    const treatmentListCard = document.getElementById('treatmentListCard');
+    const treatmentExpandBackdrop = document.getElementById('treatmentExpandBackdrop');
+    const treatmentExpandBtn = document.getElementById('treatmentExpandBtn');
+    let isTreatmentExpanded = false;
     let activeSuggestionIndex = -1;
+
+    function syncExpandButtonState(isExpanded) {
+      if (!treatmentExpandBtn) return;
+
+      treatmentExpandBtn.setAttribute('aria-pressed', isExpanded ? 'true' : 'false');
+      treatmentExpandBtn.setAttribute('title', isExpanded ? 'Collapse' : 'Expand');
+
+      const icon = treatmentExpandBtn.querySelector('i[data-feather]');
+      if (icon) {
+        icon.setAttribute('data-feather', isExpanded ? 'minimize-2' : 'maximize-2');
+        if (window.feather && typeof window.feather.replace === 'function') {
+          window.feather.replace();
+        }
+      }
+    }
+
+    function animateTreatmentCard(expand) {
+      if (!treatmentListCard) return;
+
+      const firstRect = treatmentListCard.getBoundingClientRect();
+
+      treatmentListCard.classList.toggle('is-expanded', expand);
+      document.body.classList.toggle('treatment-expand-open', expand);
+
+      if (treatmentExpandBackdrop) {
+        treatmentExpandBackdrop.classList.toggle('is-visible', expand);
+      }
+
+      const lastRect = treatmentListCard.getBoundingClientRect();
+
+      const deltaX = firstRect.left - lastRect.left;
+      const deltaY = firstRect.top - lastRect.top;
+      const scaleX = firstRect.width / Math.max(lastRect.width, 1);
+      const scaleY = firstRect.height / Math.max(lastRect.height, 1);
+
+      treatmentListCard.animate(
+        [
+          {
+            transformOrigin: 'top left',
+            transform: `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`
+          },
+          {
+            transformOrigin: 'top left',
+            transform: 'translate(0, 0) scale(1, 1)'
+          }
+        ],
+        {
+          duration: 320,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
+        }
+      );
+
+      isTreatmentExpanded = expand;
+      syncExpandButtonState(expand);
+    }
+
+    function initTreatmentExpandControl() {
+      if (!treatmentExpandBtn || !treatmentListCard) return;
+
+      syncExpandButtonState(false);
+
+      treatmentExpandBtn.addEventListener('click', () => {
+        animateTreatmentCard(!isTreatmentExpanded);
+      });
+
+      if (treatmentExpandBackdrop) {
+        treatmentExpandBackdrop.addEventListener('click', () => {
+          if (!isTreatmentExpanded) return;
+          animateTreatmentCard(false);
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && isTreatmentExpanded) {
+          animateTreatmentCard(false);
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        if (isTreatmentExpanded) {
+          syncExpandButtonState(true);
+        }
+      });
+    }
 
     function getPatientOptions() {
       if (!patientSearchList) return [];
@@ -754,6 +890,7 @@ function treatmentStatusClass(string $status): string
 
     updateServiceOptions();
     syncCategoryAndToothRule();
+    initTreatmentExpandControl();
 
     const shouldAutoOpen = <?= $openTreatmentModal ? 'true' : 'false' ?>;
     if (shouldAutoOpen) {
