@@ -881,7 +881,7 @@ if ($appointmentStatus === 'success') {
     $profileSuccessMessage = 'Appointment deleted successfully.';
 }
 
-$pageTitle = $pageTitle ?? 'Dentcoms | View Profile';
+$pageTitle = $pageTitle ?? 'DentaFlow | View Profile';
 $activeNav = 'patients.php';
 $pageContentFile = __DIR__ . '/partials/view-profile-content.php';
 

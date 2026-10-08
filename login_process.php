@@ -19,17 +19,15 @@ if ($user && password_verify($password, $user['password_hash'])) {
     $_SESSION['name'] = $user['first_name'];
 
     // 🔥 ROLE-BASED REDIRECT
-    if ($user['role_id'] == 1) {
+    if ($user['role_id'] == 1 || $user['role_id'] == 2) {
         header("Location: admin/dashboard.php");
-    } elseif ($user['role_id'] == 2) {
-        header("Location: dentist/dashboard.php");
     } else {
-        header("Location: index.html");
+        header("Location: index.php");
     }
 
     exit();
 } else {
-    header("Location: index.html?error=invalid");
+    header("Location: index.php?error=invalid");
     exit();
 }
 ?>

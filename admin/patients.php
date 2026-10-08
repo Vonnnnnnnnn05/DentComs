@@ -268,7 +268,8 @@ if ($status === 'created') {
     $successMessage = 'Patient record deleted successfully.';
 }
 
-$pageTitle = 'Dentcoms | Patients';
+$activeNav = 'patients.php';
+$pageTitle = 'DentaFlow | Patients';
 $pageContentFile = __DIR__ . '/partials/patients-content.php';
 
 include '../includes/adminsb.php';

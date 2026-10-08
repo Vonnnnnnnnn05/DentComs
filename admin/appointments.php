@@ -87,7 +87,7 @@ $prevMonth = (clone $monthStart)->modify('-1 month')->format('Y-m');
 $nextMonth = (clone $monthStart)->modify('+1 month')->format('Y-m');
 
 $activeNav = 'appointments.php';
-$pageTitle = 'Dentcoms | Appointment Calendar';
+$pageTitle = 'DentaFlow | Appointment Calendar';
 $pageContentFile = __DIR__ . '/partials/appointments-calendar-content.php';
 
 include '../includes/adminsb.php';

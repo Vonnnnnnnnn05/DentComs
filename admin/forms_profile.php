@@ -1,5 +1,5 @@
 <?php
 $profileTab = 'forms';
-$pageTitle = 'Dentcoms | Forms';
+$pageTitle = 'DentaFlow | Forms';
 
 include __DIR__ . '/profile-page-bootstrap.php';

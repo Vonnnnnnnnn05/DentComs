@@ -175,7 +175,7 @@ foreach ($patientList as $item) {
           </div>
         </div>
 
-        <div class="dc-chart-shell" data-chart-key="dentcoms_dental_chart_state_<?= htmlspecialchars((string) ($selectedPatient['id'] ?? 'default'), ENT_QUOTES, 'UTF-8') ?>">
+        <div class="dc-chart-shell" data-chart-key="dentaflow_dental_chart_state_<?= htmlspecialchars((string) ($selectedPatient['id'] ?? 'default'), ENT_QUOTES, 'UTF-8') ?>">
           <div class="dc-arch-label">Labial</div>
           <?php renderDentalChartRow($maxillaryPrimary, 5); ?>
           <?php renderDentalChartRow($maxillaryPermanent, 8); ?>
@@ -625,7 +625,7 @@ foreach ($patientList as $item) {
     });
 
     const chartShell = document.querySelector('.dc-chart-shell');
-    const chartKey = chartShell ? (chartShell.dataset.chartKey || 'dentcoms_dental_chart_state_default') : 'dentcoms_dental_chart_state_default';
+    const chartKey = chartShell ? (chartShell.dataset.chartKey || 'dentaflow_dental_chart_state_default') : 'dentaflow_dental_chart_state_default';
     const statusPicker = document.getElementById('dcStatusPicker');
     const statusOptions = Array.from(document.querySelectorAll('[data-status-option]'));
     const surfaceButtons = Array.from(document.querySelectorAll('.dc-surface[data-tooth][data-surface]'));

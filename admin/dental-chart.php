@@ -37,8 +37,8 @@ if (!$selectedPatient) {
 
 $activeNav = 'dental-chart.php';
 $pageTitle = $isViewDentalChartPage
-	? 'Dentcoms | View Dental Chart'
-	: 'Dentcoms | Dental Chart';
+	? 'DentaFlow | View Dental Chart'
+	: 'DentaFlow | Dental Chart';
 $pageContentFile = __DIR__ . '/partials/dental-chart-content.php';
 
 include '../includes/adminsb.php';

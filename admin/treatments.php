@@ -521,8 +521,8 @@ if ($hasTreatmentsTable && ($selectedPatientId !== '' || $selectedPatientName !=
 
 $activeNav = 'treatments.php';
 $pageTitle = $isViewTreatmentsPage
-    ? 'Dentcoms | View Treatments'
-    : 'Dentcoms | Treatments Plans';
+    ? 'DentaFlow | View Treatments'
+    : 'DentaFlow | Treatments Plans';
 $pageContentFile = __DIR__ . '/partials/treatments-content.php';
 
 include '../includes/adminsb.php';

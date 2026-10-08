@@ -6,7 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // ✅ Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: index.html");
+    $redirectPath = file_exists('index.php') ? 'index.php' : '../index.php';
+    header("Location: {$redirectPath}");
     exit();
 }
 ?>
