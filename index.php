@@ -191,6 +191,27 @@
     #loginModal .modal-panel {
       transition: opacity 320ms ease, transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
     }
+
+    /* Infinite Testimonials Banner Slider */
+    #testimonialSliderWrapper {
+      position: relative;
+      touch-action: pan-y;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #testimonialTrack {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      will-change: transform;
+      touch-action: pan-y;
+    }
+    .testimonial-card {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+    }
   </style>
 </head>
 <body class="text-gray-800 antialiased selection:bg-blue-100 selection:text-blue-900">
@@ -554,45 +575,515 @@
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section id="testimonials" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-      
-      <div class="text-center mb-16 reveal-on-scroll">
-        <i class="fas fa-quote-right text-blue-200 text-4xl mb-2"></i>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Trusted by dental leaders</h2>
-        <p class="text-slate-500 mt-2">Real reviews from practice managers and clinic owners.</p>
+  <!-- Testimonials: Infinite Horizontal Banner Slider -->
+  <section id="testimonials" class="py-20 sm:py-28 bg-white overflow-hidden relative">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center mb-10 sm:mb-14 reveal-on-scroll">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-[#1d6ee5] border border-blue-100 mb-3 shadow-2xs">
+        <i class="fas fa-star text-amber-400 text-xs"></i>
+        <span>Rated 4.9/5 by 450+ Dental Practices</span>
+      </div>
+      <div class="flex items-center justify-center mb-2">
+        <i class="fas fa-quote-right text-blue-200 text-3xl sm:text-4xl"></i>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Trusted by dental leaders</h2>
+      <p class="text-slate-500 mt-2 text-base sm:text-lg max-w-2xl mx-auto">Real reviews from practice managers and clinic owners.</p>
+    </div>
+
+    <!-- Infinite Horizontal Banner Slider Container -->
+    <div class="relative w-full overflow-hidden select-none py-2" id="testimonialSliderWrapper" aria-label="Customer Testimonials Slider">
+      <!-- Gradient Edge Fade Overlays -->
+      <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-28 md:w-44 bg-gradient-to-r from-white via-white/80 to-transparent z-10"></div>
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-28 md:w-44 bg-gradient-to-l from-white via-white/80 to-transparent z-10"></div>
+
+      <!-- Testimonial Slider Track -->
+      <div id="testimonialTrack" class="flex gap-6 items-stretch will-change-transform cursor-grab select-none">
+        
+        <!-- Group 1 (Primary Set) -->
+        <div class="testimonial-group flex gap-6 shrink-0" data-group="1">
+          
+          <!-- Card 1 -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Verified Clinic
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“DentaFlow reduced no-shows by 45% and saved our front desk 10+ hours weekly. The dental chart interface is exceptionally clean.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-blue-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold shrink-0">
+                <i class="fas fa-user-md text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Sarah Chen</p>
+                <p class="text-xs text-slate-400 truncate">BrightSmile Dental</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Multi-chair Clinic
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Incredible billing workflows and patient balance visibility. Finally a practice system designed intuitively around dentistry.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold shrink-0">
+                <i class="fas fa-briefcase text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Michael Torres</p>
+                <p class="text-xs text-slate-400 truncate">Practice Manager, SmileHub</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Group Practice
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“The reporting and revenue analytics module gave us visibility into procedure production and boosted our practice collections significantly.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold shrink-0">
+                <i class="fas fa-hospital-user text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. James Park</p>
+                <p class="text-xs text-slate-400 truncate">Elite Dentistry Group</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-700 bg-sky-50 border border-sky-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Pediatric Care
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Migrating from legacy server software took under 48 hours. Our hygienists and front desk loved the cloud-first interface from day one.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-sky-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold shrink-0">
+                <i class="fas fa-tooth text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Elena Rostova</p>
+                <p class="text-xs text-slate-400 truncate">Apex Pediatric Dentistry</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> 3 Locations
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“The automated SMS confirmations and digital intake forms eliminated paperwork chaos. Patients love checking in before arriving.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold shrink-0">
+                <i class="fas fa-calendar-check text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Marcus Vance</p>
+                <p class="text-xs text-slate-400 truncate">Operations Director, Metro Dental</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Surgical Practice
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Periodontal charting is twice as fast now. Being able to access emergency patient records securely on weekend calls is a lifesaver.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold shrink-0">
+                <i class="fas fa-shield-alt text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Aris Thorne</p>
+                <p class="text-xs text-slate-400 truncate">Thorne Oral Surgery</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Group 2 (Identical Clone for Infinite Seamless Loop) -->
+        <div class="testimonial-group flex gap-6 shrink-0" data-group="2" aria-hidden="true">
+          
+          <!-- Card 1 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Verified Clinic
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“DentaFlow reduced no-shows by 45% and saved our front desk 10+ hours weekly. The dental chart interface is exceptionally clean.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-blue-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold shrink-0">
+                <i class="fas fa-user-md text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Sarah Chen</p>
+                <p class="text-xs text-slate-400 truncate">BrightSmile Dental</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Multi-chair Clinic
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Incredible billing workflows and patient balance visibility. Finally a practice system designed intuitively around dentistry.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold shrink-0">
+                <i class="fas fa-briefcase text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Michael Torres</p>
+                <p class="text-xs text-slate-400 truncate">Practice Manager, SmileHub</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Group Practice
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“The reporting and revenue analytics module gave us visibility into procedure production and boosted our practice collections significantly.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold shrink-0">
+                <i class="fas fa-hospital-user text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. James Park</p>
+                <p class="text-xs text-slate-400 truncate">Elite Dentistry Group</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-700 bg-sky-50 border border-sky-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Pediatric Care
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Migrating from legacy server software took under 48 hours. Our hygienists and front desk loved the cloud-first interface from day one.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-sky-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold shrink-0">
+                <i class="fas fa-tooth text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Elena Rostova</p>
+                <p class="text-xs text-slate-400 truncate">Apex Pediatric Dentistry</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> 3 Locations
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“The automated SMS confirmations and digital intake forms eliminated paperwork chaos. Patients love checking in before arriving.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold shrink-0">
+                <i class="fas fa-calendar-check text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Marcus Vance</p>
+                <p class="text-xs text-slate-400 truncate">Operations Director, Metro Dental</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Surgical Practice
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Periodontal charting is twice as fast now. Being able to access emergency patient records securely on weekend calls is a lifesaver.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold shrink-0">
+                <i class="fas fa-shield-alt text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Aris Thorne</p>
+                <p class="text-xs text-slate-400 truncate">Thorne Oral Surgery</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Group 3 (Buffer Clone for Wide/4K Screens) -->
+        <div class="testimonial-group flex gap-6 shrink-0" data-group="3" aria-hidden="true">
+          
+          <!-- Card 1 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Verified Clinic
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“DentaFlow reduced no-shows by 45% and saved our front desk 10+ hours weekly. The dental chart interface is exceptionally clean.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-blue-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold shrink-0">
+                <i class="fas fa-user-md text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Sarah Chen</p>
+                <p class="text-xs text-slate-400 truncate">BrightSmile Dental</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Multi-chair Clinic
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Incredible billing workflows and patient balance visibility. Finally a practice system designed intuitively around dentistry.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold shrink-0">
+                <i class="fas fa-briefcase text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Michael Torres</p>
+                <p class="text-xs text-slate-400 truncate">Practice Manager, SmileHub</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Group Practice
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“The reporting and revenue analytics module gave us visibility into procedure production and boosted our practice collections significantly.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold shrink-0">
+                <i class="fas fa-hospital-user text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. James Park</p>
+                <p class="text-xs text-slate-400 truncate">Elite Dentistry Group</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-700 bg-sky-50 border border-sky-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Pediatric Care
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Migrating from legacy server software took under 48 hours. Our hygienists and front desk loved the cloud-first interface from day one.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-sky-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold shrink-0">
+                <i class="fas fa-tooth text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Elena Rostova</p>
+                <p class="text-xs text-slate-400 truncate">Apex Pediatric Dentistry</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> 3 Locations
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“The automated SMS confirmations and digital intake forms eliminated paperwork chaos. Patients love checking in before arriving.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold shrink-0">
+                <i class="fas fa-calendar-check text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Marcus Vance</p>
+                <p class="text-xs text-slate-400 truncate">Operations Director, Metro Dental</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 Clone -->
+          <div class="testimonial-card w-[310px] sm:w-[380px] md:w-[420px] shrink-0 bg-slate-50/90 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-1 text-amber-400">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200/60 px-2.5 py-0.5 rounded-full">
+                  <i class="fas fa-check-circle text-[10px]"></i> Surgical Practice
+                </span>
+              </div>
+              <p class="text-slate-700 italic text-sm sm:text-base leading-relaxed">“Periodontal charting is twice as fast now. Being able to access emergency patient records securely on weekend calls is a lifesaver.”</p>
+            </div>
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
+              <div class="w-11 h-11 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold shrink-0">
+                <i class="fas fa-shield-alt text-base"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="font-bold text-sm text-slate-900 truncate">Dr. Aris Thorne</p>
+                <p class="text-xs text-slate-400 truncate">Thorne Oral Surgery</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Interactive Navigation & Status Controls -->
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 mt-8 sm:mt-10 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          id="sliderPauseToggleBtn"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition shadow-2xs hover:border-blue-300 cursor-pointer"
+          title="Click to pause or resume auto-sliding"
+        >
+          <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse" id="sliderStatusDot"></span>
+          <span id="sliderPauseText">Auto-sliding (Hover to pause)</span>
+        </button>
+        <span class="text-xs text-slate-400 hidden sm:inline-flex items-center gap-1">
+          <i class="fas fa-arrows-left-right text-[10px]"></i> Swipe or drag anywhere
+        </span>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-8">
-        
-        <div class="bg-slate-50/80 rounded-3xl p-7 border border-slate-100 shadow-xs hover-card transition reveal-on-scroll" style="transition-delay: 50ms;">
-          <div class="flex gap-1 text-amber-400 mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-          <p class="text-slate-700 italic text-sm leading-relaxed">“DentaFlow reduced no-shows by 45% and saved our front desk 10+ hours weekly. The dental chart interface is exceptionally clean.”</p>
-          <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
-            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold"><i class="fas fa-user-md"></i></div>
-            <div><p class="font-bold text-sm text-slate-900">Dr. Sarah Chen</p><p class="text-xs text-slate-400">BrightSmile Dental</p></div>
-          </div>
-        </div>
-
-        <div class="bg-slate-50/80 rounded-3xl p-7 border border-slate-100 shadow-xs hover-card transition reveal-on-scroll" style="transition-delay: 150ms;">
-          <div class="flex gap-1 text-amber-400 mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
-          <p class="text-slate-700 italic text-sm leading-relaxed">“Incredible billing workflows and patient balance visibility. Finally a practice system designed intuitively around dentistry.”</p>
-          <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
-            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold"><i class="fas fa-briefcase"></i></div>
-            <div><p class="font-bold text-sm text-slate-900">Michael Torres</p><p class="text-xs text-slate-400">Practice Manager, SmileHub</p></div>
-          </div>
-        </div>
-
-        <div class="bg-slate-50/80 rounded-3xl p-7 border border-slate-100 shadow-xs hover-card transition reveal-on-scroll" style="transition-delay: 250ms;">
-          <div class="flex gap-1 text-amber-400 mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-          <p class="text-slate-700 italic text-sm leading-relaxed">“The reporting and revenue analytics module gave us visibility into procedure production and boosted our practice collections significantly.”</p>
-          <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/60">
-            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-[#1d6ee5] font-bold"><i class="fas fa-hospital-user"></i></div>
-            <div><p class="font-bold text-sm text-slate-900">Dr. James Park</p><p class="text-xs text-slate-400">Elite Dentistry Group</p></div>
-          </div>
-        </div>
-
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          id="sliderPrevBtn"
+          class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-blue-50 hover:border-blue-300 text-slate-700 hover:text-blue-600 shadow-xs flex items-center justify-center transition hover:scale-105 active:scale-95 cursor-pointer"
+          aria-label="Previous testimonials"
+          title="Scroll Left"
+        >
+          <i class="fas fa-arrow-left text-xs"></i>
+        </button>
+        <button
+          type="button"
+          id="sliderNextBtn"
+          class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-blue-50 hover:border-blue-300 text-slate-700 hover:text-blue-600 shadow-xs flex items-center justify-center transition hover:scale-105 active:scale-95 cursor-pointer"
+          aria-label="Next testimonials"
+          title="Scroll Right"
+        >
+          <i class="fas fa-arrow-right text-xs"></i>
+        </button>
       </div>
     </div>
   </section>
@@ -922,6 +1413,224 @@
           }
         }
       });
+
+      // 6. Testimonials Infinite Banner Slider
+      (function initTestimonialSlider() {
+        const sliderWrapper = document.getElementById('testimonialSliderWrapper');
+        const track = document.getElementById('testimonialTrack');
+        const prevBtn = document.getElementById('sliderPrevBtn');
+        const nextBtn = document.getElementById('sliderNextBtn');
+        const pauseToggleBtn = document.getElementById('sliderPauseToggleBtn');
+        const pauseText = document.getElementById('sliderPauseText');
+        const statusDot = document.getElementById('sliderStatusDot');
+
+        if (!sliderWrapper || !track) return;
+
+        let currentOffset = 0;
+        let baseSpeed = 0.75; // Pixels per frame at 60fps (~45px/sec)
+        let isHovered = false;
+        let isManuallyPaused = false;
+        let isPointerDown = false;
+        let isDragging = false;
+        let startX = 0;
+        let dragStartOffset = 0;
+        let lastMoveX = 0;
+        let lastMoveTime = 0;
+        let velocity = 0;
+        let momentum = 0;
+        let lastTimestamp = performance.now();
+        let singleWidth = 0;
+        let activePointerId = null;
+
+        function updateDimensions() {
+          const group1 = track.querySelector('[data-group="1"]');
+          const group2 = track.querySelector('[data-group="2"]');
+          if (group1 && group2) {
+            singleWidth = group2.offsetLeft - group1.offsetLeft;
+          }
+        }
+
+        // Measure once DOM has painted
+        updateDimensions();
+        window.addEventListener('resize', updateDimensions);
+        window.addEventListener('load', updateDimensions);
+
+        if ('ResizeObserver' in window) {
+          const ro = new ResizeObserver(updateDimensions);
+          const g1 = track.querySelector('[data-group="1"]');
+          if (g1) ro.observe(g1);
+        }
+
+        function updateStatusUI() {
+          if (!pauseText || !statusDot) return;
+          if (isManuallyPaused) {
+            pauseText.textContent = 'Paused (Click to play)';
+            statusDot.className = 'w-2 h-2 rounded-full bg-amber-500';
+          } else if (isHovered) {
+            pauseText.textContent = 'Paused on hover';
+            statusDot.className = 'w-2 h-2 rounded-full bg-amber-400';
+          } else {
+            pauseText.textContent = 'Auto-sliding (Hover to pause)';
+            statusDot.className = 'w-2 h-2 rounded-full bg-blue-600 animate-pulse';
+          }
+        }
+
+        // Main 60/120fps Animation Loop
+        function animateSlider(now) {
+          let dt = now - lastTimestamp;
+          lastTimestamp = now;
+          if (dt > 100 || dt <= 0) dt = 16.667; // Protection against tab blur lag
+
+          const frameScale = dt / 16.667;
+
+          if (singleWidth <= 0) {
+            updateDimensions();
+          }
+
+          if (singleWidth > 0) {
+            // Apply momentum decay if active
+            if (Math.abs(momentum) > 0.1) {
+              currentOffset += momentum * frameScale;
+              momentum *= Math.pow(0.92, frameScale);
+            } else {
+              momentum = 0;
+              // Continuous smooth slide from right to left
+              if (!isHovered && !isManuallyPaused && !isPointerDown) {
+                currentOffset += baseSpeed * frameScale;
+              }
+            }
+
+            // Zero-jump seamless infinite looping
+            while (currentOffset >= singleWidth) {
+              currentOffset -= singleWidth;
+            }
+            while (currentOffset < 0) {
+              currentOffset += singleWidth;
+            }
+
+            if (!isDragging) {
+              track.style.transform = `translate3d(-${currentOffset.toFixed(2)}px, 0, 0)`;
+            }
+          }
+
+          requestAnimationFrame(animateSlider);
+        }
+
+        requestAnimationFrame((time) => {
+          lastTimestamp = time;
+          requestAnimationFrame(animateSlider);
+        });
+
+        // Pause on Hover
+        sliderWrapper.addEventListener('mouseenter', () => {
+          isHovered = true;
+          updateStatusUI();
+        });
+
+        sliderWrapper.addEventListener('mouseleave', () => {
+          isHovered = false;
+          updateStatusUI();
+        });
+
+        // Touch Swipe & Mouse Drag Handling via Pointer Events
+        sliderWrapper.addEventListener('pointerdown', (e) => {
+          if (e.button !== undefined && e.button !== 0) return;
+          isPointerDown = true;
+          isDragging = false;
+          startX = e.clientX;
+          dragStartOffset = currentOffset;
+          lastMoveX = e.clientX;
+          lastMoveTime = performance.now();
+          velocity = 0;
+          momentum = 0;
+          activePointerId = e.pointerId;
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          if (!isPointerDown) return;
+          const deltaX = e.clientX - startX;
+
+          if (!isDragging && Math.abs(deltaX) > 6) {
+            isDragging = true;
+            try {
+              if (activePointerId !== null) sliderWrapper.setPointerCapture(activePointerId);
+            } catch (err) {}
+            track.classList.add('cursor-grabbing');
+            track.classList.remove('cursor-grab');
+          }
+
+          if (isDragging) {
+            const now = performance.now();
+            const dt = now - lastMoveTime;
+            if (dt > 6) {
+              velocity = (e.clientX - lastMoveX) / dt;
+              lastMoveX = e.clientX;
+              lastMoveTime = now;
+            }
+
+            currentOffset = dragStartOffset - deltaX;
+
+            while (singleWidth > 0 && currentOffset >= singleWidth) {
+              currentOffset -= singleWidth;
+              dragStartOffset -= singleWidth;
+            }
+            while (singleWidth > 0 && currentOffset < 0) {
+              currentOffset += singleWidth;
+              dragStartOffset += singleWidth;
+            }
+
+            track.style.transform = `translate3d(-${currentOffset.toFixed(2)}px, 0, 0)`;
+          }
+        });
+
+        function handlePointerEnd() {
+          if (!isPointerDown) return;
+          isPointerDown = false;
+
+          if (isDragging) {
+            track.classList.remove('cursor-grabbing');
+            track.classList.add('cursor-grab');
+
+            // Apply swipe flick momentum
+            if (Math.abs(velocity) > 0.2) {
+              momentum = -velocity * 18;
+              if (momentum > 40) momentum = 40;
+              if (momentum < -40) momentum = -40;
+            }
+
+            try {
+              if (activePointerId !== null) sliderWrapper.releasePointerCapture(activePointerId);
+            } catch (err) {}
+          }
+          activePointerId = null;
+        }
+
+        window.addEventListener('pointerup', handlePointerEnd);
+        window.addEventListener('pointercancel', handlePointerEnd);
+
+        // Prevent accidental link/button clicks while dragging
+        track.addEventListener('click', (e) => {
+          if (isDragging) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }, true);
+
+        // Navigation Buttons (Prev & Next)
+        prevBtn?.addEventListener('click', () => {
+          momentum = -14;
+        });
+
+        nextBtn?.addEventListener('click', () => {
+          momentum = 14;
+        });
+
+        // Pause/Play Toggle Button
+        pauseToggleBtn?.addEventListener('click', () => {
+          isManuallyPaused = !isManuallyPaused;
+          updateStatusUI();
+        });
+      })();
 
       // Smooth scroll for internal anchor links
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
