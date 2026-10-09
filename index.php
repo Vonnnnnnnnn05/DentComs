@@ -195,36 +195,113 @@
 </head>
 <body class="text-gray-800 antialiased selection:bg-blue-100 selection:text-blue-900">
 
-  <!-- Navigation Bar - clean white with glassmorphism -->
-  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-xs transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex justify-between items-center">
-      <a href="index.php" class="brand-logo flex items-center gap-2.5 transition">
-        <i class="fas fa-tooth text-3xl text-[#1d6ee5] brand-logo-icon"></i>
-        <span class="font-extrabold text-2xl tracking-tight text-slate-900">DentaFlow<span class="text-[#1d6ee5]">.</span></span>
+  <!-- Navigation Bar - clean white with glassmorphism & mobile drawer -->
+  <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xs transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex justify-between items-center">
+      <!-- Brand / Logo -->
+      <a href="index.php" class="brand-logo flex items-center gap-2 sm:gap-2.5 transition">
+        <i class="fas fa-tooth text-2xl sm:text-3xl text-[#1d6ee5] brand-logo-icon"></i>
+        <span class="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900">DentaFlow<span class="text-[#1d6ee5]">.</span></span>
       </a>
+
+      <!-- Desktop Links -->
       <div class="hidden md:flex gap-8 text-slate-600 font-medium text-sm">
         <a href="#features" class="hover:text-[#1d6ee5] transition-colors py-1">Features</a>
         <a href="#how-it-works" class="hover:text-[#1d6ee5] transition-colors py-1">How it works</a>
         <a href="#testimonials" class="hover:text-[#1d6ee5] transition-colors py-1">Reviews</a>
         <a href="#contact" class="hover:text-[#1d6ee5] transition-colors py-1">Contact</a>
       </div>
-      <div class="flex gap-3">
-        <button id="openLoginModal" type="button" class="hidden sm:inline-block border border-slate-200 text-slate-700 px-5 py-2 rounded-full text-sm font-semibold hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 transition-all">Log in</button>
+
+      <!-- Right Action Bar: Quick Log in button + Hamburger on mobile -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button
+          type="button"
+          class="open-login-trigger border border-slate-200 text-slate-700 px-3.5 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 transition-all flex items-center gap-1.5 shadow-xs"
+        >
+          <i class="fas fa-arrow-right-to-bracket text-blue-600 text-xs"></i>
+          <span>Log in</span>
+        </button>
+
+        <!-- Mobile Hamburger Button -->
+        <button
+          id="mobileMenuToggle"
+          type="button"
+          class="md:hidden inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-xl text-slate-600 hover:text-[#1d6ee5] hover:bg-blue-50/80 transition focus:outline-none"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          <i id="mobileMenuIcon" class="fas fa-bars text-lg sm:text-xl transition-transform duration-200"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation Menu -->
+    <div
+      id="mobileNavMenu"
+      class="md:hidden max-h-0 overflow-hidden border-b border-transparent bg-white/95 backdrop-blur-md transition-all duration-300 ease-in-out opacity-0"
+    >
+      <div class="px-4 sm:px-6 pt-2 pb-6 space-y-1.5 border-t border-slate-100">
+        <a
+          href="#features"
+          class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-700 font-semibold hover:text-[#1d6ee5] hover:bg-blue-50/70 transition-colors"
+        >
+          <i class="fas fa-cogs w-5 text-[#1d6ee5]"></i>
+          <span>Features</span>
+        </a>
+        <a
+          href="#how-it-works"
+          class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-700 font-semibold hover:text-[#1d6ee5] hover:bg-blue-50/70 transition-colors"
+        >
+          <i class="fas fa-rocket w-5 text-[#1d6ee5]"></i>
+          <span>How it works</span>
+        </a>
+        <a
+          href="#testimonials"
+          class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-700 font-semibold hover:text-[#1d6ee5] hover:bg-blue-50/70 transition-colors"
+        >
+          <i class="fas fa-star w-5 text-[#1d6ee5]"></i>
+          <span>Reviews</span>
+        </a>
+        <a
+          href="#contact"
+          class="mobile-nav-link flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-700 font-semibold hover:text-[#1d6ee5] hover:bg-blue-50/70 transition-colors"
+        >
+          <i class="fas fa-envelope w-5 text-[#1d6ee5]"></i>
+          <span>Contact</span>
+        </a>
+
+        <!-- Mobile Drawer CTA Buttons -->
+        <div class="pt-3 border-t border-slate-100 space-y-2.5">
+          <button
+            type="button"
+            class="open-login-trigger w-full flex items-center justify-center gap-2 border border-slate-200 text-slate-700 px-5 py-3 rounded-2xl text-sm font-semibold hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 transition-all shadow-xs"
+          >
+            <i class="fas fa-lock text-blue-600 text-xs"></i>
+            <span>Sign in to Clinic Portal</span>
+          </button>
+          <button
+            type="button"
+            class="start-trial-trigger w-full flex items-center justify-center gap-2 bg-[#1d6ee5] hover:bg-[#1558b8] text-white px-5 py-3 rounded-2xl text-sm font-semibold shadow-md shadow-blue-600/25 transition-all"
+          >
+            <i class="fas fa-calendar-check text-xs"></i>
+            <span>Start Free Trial</span>
+          </button>
+        </div>
       </div>
     </div>
   </nav>
 
   <!-- Login Modal -->
-  <div id="loginModal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/60 backdrop-blur-xs px-4 opacity-0 invisible">
+  <div id="loginModal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/60 backdrop-blur-xs px-4 opacity-0 invisible transition-all duration-300">
     <div class="absolute inset-0" data-close-login-modal></div>
-    <div class="modal-panel relative w-full max-w-md translate-y-4 scale-[0.98] rounded-3xl border border-slate-200 bg-white p-7 opacity-0 shadow-2xl">
+    <div class="modal-panel relative w-full max-w-md translate-y-4 scale-[0.98] rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 opacity-0 shadow-2xl transition-all duration-300 max-h-[95vh] overflow-y-auto">
       <button
         id="closeLoginModal"
         type="button"
-        class="absolute right-4 top-4 h-10 w-10 rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+        class="absolute right-4 top-4 h-10 w-10 rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 flex items-center justify-center"
         aria-label="Close login modal"
       >
-        <i class="fas fa-times"></i>
+        <i class="fas fa-times text-base"></i>
       </button>
       <div class="mb-6">
         <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#1d6ee5]">Secure Portal</p>
@@ -242,7 +319,7 @@
             autocomplete="email"
             placeholder="admin@gmail.com"
             required
-            class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:border-[#1d6ee5] focus:ring-2 focus:ring-blue-100 transition"
+            class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-base text-slate-800 placeholder:text-slate-400 focus:border-[#1d6ee5] focus:ring-2 focus:ring-blue-100 transition"
           >
         </div>
         <div>
@@ -254,7 +331,7 @@
             autocomplete="current-password"
             placeholder="Enter your password"
             required
-            class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-slate-800 placeholder:text-slate-400 focus:border-[#1d6ee5] focus:ring-2 focus:ring-blue-100 transition"
+            class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-base text-slate-800 placeholder:text-slate-400 focus:border-[#1d6ee5] focus:ring-2 focus:ring-blue-100 transition"
           >
         </div>
         <button type="submit" class="w-full rounded-2xl bg-[#1d6ee5] px-5 py-3.5 font-semibold text-white shadow-md shadow-blue-600/25 transition hover:bg-[#1558b8]">
@@ -265,35 +342,35 @@
   </div>
 
   <!-- Hero Section with Ambient Glow and Floating Animations -->
-  <section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28 lg:pt-24">
+  <section class="relative overflow-hidden pt-10 pb-16 sm:pt-16 sm:pb-24 md:pt-20 md:pb-28 lg:pt-24">
     <!-- Ambient Animated Glow Orbs -->
     <div class="hero-gradient-bg absolute inset-0 pointer-events-none"></div>
     <div class="absolute -top-24 right-10 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl pointer-events-none animate-orb"></div>
     <div class="absolute top-48 left-10 w-80 h-80 bg-sky-300/15 rounded-full blur-3xl pointer-events-none animate-orb" style="animation-delay: -3s;"></div>
 
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div class="grid md:grid-cols-2 gap-10 md:gap-12 items-center">
         
         <!-- Left Hero Copy with Staggered Fade Up -->
         <div>
-          <h1 class="hero-fade-1 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.12]">
+          <h1 class="hero-fade-1 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.14]">
             Modernize your <span class="text-[#1d6ee5] bg-gradient-to-r from-[#1d6ee5] to-[#38bdf8] bg-clip-text text-transparent">dental practice</span> with one intelligent system.
           </h1>
           
-          <p class="hero-fade-2 text-slate-500 text-lg mt-6 max-w-lg leading-relaxed">
+          <p class="hero-fade-2 text-slate-500 text-base sm:text-lg mt-4 sm:mt-6 max-w-lg leading-relaxed">
             DentaFlow streamlines appointments, patient records, billing, and analytics — all in a clean, secure platform built for modern clinics.
           </p>
 
-          <div class="hero-fade-3 flex flex-wrap gap-4 mt-8">
-            <button class="btn-primary animate-btn-pulse bg-[#1d6ee5] hover:bg-[#1558b8] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-blue-600/30 transition flex items-center gap-2">
+          <div class="hero-fade-3 flex flex-col sm:flex-row gap-3.5 sm:gap-4 mt-6 sm:mt-8 w-full sm:w-auto">
+            <button class="btn-primary animate-btn-pulse bg-[#1d6ee5] hover:bg-[#1558b8] text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2 w-full sm:w-auto">
               <i class="fas fa-calendar-check"></i> Start free trial
             </button>
-            <button class="border border-slate-200 bg-white text-slate-700 font-medium px-7 py-3.5 rounded-full hover:bg-slate-50 hover:border-slate-300 transition flex items-center gap-2">
+            <button class="border border-slate-200 bg-white text-slate-700 font-medium px-7 py-3.5 rounded-full hover:bg-slate-50 hover:border-slate-300 transition flex items-center justify-center gap-2 w-full sm:w-auto">
               <i class="fas fa-play-circle text-blue-600"></i> Watch demo
             </button>
           </div>
 
-          <div class="hero-fade-4 flex items-center gap-6 mt-8 text-sm text-slate-500">
+          <div class="hero-fade-4 flex flex-wrap items-center gap-4 sm:gap-6 mt-6 sm:mt-8 text-xs sm:text-sm text-slate-500">
             <div class="flex items-center gap-1.5"><i class="fas fa-check-circle text-blue-500"></i> <span>No credit card</span></div>
             <div class="flex items-center gap-1.5"><i class="fas fa-check-circle text-blue-500"></i> <span>14-day free</span></div>
             <div class="flex items-center gap-1.5"><i class="fas fa-check-circle text-blue-500"></i> <span>GDPR ready</span></div>
@@ -301,15 +378,15 @@
         </div>
 
         <!-- Right: Animated Floating Dashboard Mockup with Interactive Tilt -->
-        <div class="relative flex justify-center hero-fade-image">
-          <div id="heroMockupWrapper" class="relative group animate-hero-float transition-transform duration-300">
+        <div class="relative flex justify-center hero-fade-image mt-4 md:mt-0">
+          <div id="heroMockupWrapper" class="relative group animate-hero-float transition-transform duration-300 w-full max-w-lg md:max-w-none">
             
             <!-- Main Mockup Container -->
-            <div id="heroMockupCard" class="bg-white p-2.5 rounded-3xl shadow-2xl border border-slate-100 transition-all duration-300">
+            <div id="heroMockupCard" class="bg-white p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl border border-slate-100 transition-all duration-300">
               <img 
                 src="assets/images/dentaflow-dashboard-preview.jpg" 
                 alt="DentaFlow dashboard preview" 
-                class="rounded-2xl w-full object-cover shadow-sm transition-transform duration-500"
+                class="rounded-xl sm:rounded-2xl w-full object-cover shadow-sm transition-transform duration-500"
               >
             </div>
 
@@ -342,39 +419,39 @@
   </section>
 
   <!-- Trusted by / Stats Bar with Dynamic Number Animation -->
-  <div class="border-y border-slate-100 bg-slate-50/60 py-6 reveal-on-scroll">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-wrap justify-between items-center gap-6 text-center md:text-left">
+  <div class="border-y border-slate-100 bg-slate-50/60 py-6 sm:py-7 reveal-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 items-center text-center sm:text-left">
       
-      <div class="flex items-center gap-3.5">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-[#1d6ee5]">
+      <div class="flex items-center justify-center sm:justify-start gap-3.5">
+        <div class="flex h-11 w-11 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-blue-100 text-[#1d6ee5]">
           <i class="fas fa-tooth text-xl"></i>
         </div>
-        <div>
-          <p class="font-extrabold text-xl text-slate-900 leading-tight">
+        <div class="text-left">
+          <p class="font-extrabold text-2xl sm:text-xl text-slate-900 leading-tight">
             <span class="stat-counter" data-target="500">0</span>+
           </p>
           <p class="text-xs text-slate-500 font-medium">Clinics onboarded</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3.5">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+      <div class="flex items-center justify-center sm:justify-start gap-3.5">
+        <div class="flex h-11 w-11 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
           <i class="fas fa-chart-simple text-xl"></i>
         </div>
-        <div>
-          <p class="font-extrabold text-xl text-slate-900 leading-tight">
+        <div class="text-left">
+          <p class="font-extrabold text-2xl sm:text-xl text-slate-900 leading-tight">
             <span class="stat-counter" data-target="98">0</span>%
           </p>
           <p class="text-xs text-slate-500 font-medium">Patient satisfaction</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-3.5">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+      <div class="flex items-center justify-center sm:justify-start gap-3.5">
+        <div class="flex h-11 w-11 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
           <i class="fas fa-clock text-xl"></i>
         </div>
-        <div>
-          <p class="font-extrabold text-xl text-slate-900 leading-tight">24/7</p>
+        <div class="text-left">
+          <p class="font-extrabold text-2xl sm:text-xl text-slate-900 leading-tight">24/7</p>
           <p class="text-xs text-slate-500 font-medium">Secure cloud uptime</p>
         </div>
       </div>
@@ -521,18 +598,18 @@
   </section>
 
   <!-- CTA Banner with Vibrant Glow -->
-  <section class="py-20 reveal-on-scroll">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="relative overflow-hidden bg-gradient-to-tr from-[#1d6ee5] via-[#2563eb] to-[#38bdf8] rounded-3xl p-10 md:p-14 text-center text-white shadow-2xl shadow-blue-500/25">
+  <section class="py-14 sm:py-20 reveal-on-scroll">
+    <div class="max-w-6xl mx-auto px-4 sm:px-8">
+      <div class="relative overflow-hidden bg-gradient-to-tr from-[#1d6ee5] via-[#2563eb] to-[#38bdf8] rounded-3xl p-7 sm:p-10 md:p-14 text-center text-white shadow-2xl shadow-blue-500/25">
         <div class="relative z-10">
-          <i class="fas fa-tooth text-4xl mb-4 text-white/90"></i>
-          <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Ready to elevate your dental practice?</h2>
-          <p class="text-blue-50 max-w-xl mx-auto mt-3 text-base">Join modern dental clinics that run on DentaFlow. Start your 14-day free trial today.</p>
-          <div class="flex flex-wrap justify-center gap-4 mt-8">
-            <button class="bg-white text-[#1d6ee5] hover:bg-slate-100 font-bold px-8 py-3.5 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2">
+          <i class="fas fa-tooth text-3xl sm:text-4xl mb-4 text-white/90"></i>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">Ready to elevate your dental practice?</h2>
+          <p class="text-blue-50 max-w-xl mx-auto mt-3 text-sm sm:text-base">Join modern dental clinics that run on DentaFlow. Start your 14-day free trial today.</p>
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 w-full sm:w-auto">
+            <button class="start-trial-trigger bg-white text-[#1d6ee5] hover:bg-slate-100 font-bold px-7 sm:px-8 py-3.5 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2 w-full sm:w-auto">
               <i class="fas fa-arrow-right"></i> Request free demo
             </button>
-            <button class="border border-white/40 hover:bg-white/10 text-white px-8 py-3.5 rounded-full font-medium transition flex items-center gap-2">
+            <button class="border border-white/40 hover:bg-white/10 text-white px-7 sm:px-8 py-3.5 rounded-full font-medium transition flex items-center justify-center gap-2 w-full sm:w-auto">
               <i class="fas fa-headset"></i> Talk to sales
             </button>
           </div>
@@ -542,8 +619,8 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="py-20 border-t border-slate-100 bg-white reveal-on-scroll">
-    <div class="max-w-5xl mx-auto px-6 sm:px-8">
+  <section id="contact" class="py-16 sm:py-20 border-t border-slate-100 bg-white reveal-on-scroll">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8">
       <div class="grid md:grid-cols-2 gap-10 items-center">
         <div>
           <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
@@ -552,17 +629,17 @@
           <p class="text-slate-500 mt-2 text-sm leading-relaxed">Receive product updates, dental software features, and best practices.</p>
           <div class="flex mt-6 flex-col sm:flex-row gap-3">
             <input type="email" placeholder="Your email address" class="border border-slate-200 rounded-full px-5 py-3 w-full sm:w-72 focus:ring-2 focus:ring-blue-100 focus:border-[#1d6ee5] transition text-sm">
-            <button class="btn-primary bg-[#1d6ee5] hover:bg-[#1558b8] text-white px-6 py-3 rounded-full font-semibold transition text-sm">
-              Subscribe <i class="fas fa-paper-plane ml-1"></i>
+            <button class="btn-primary bg-[#1d6ee5] hover:bg-[#1558b8] text-white px-6 py-3 rounded-full font-semibold transition text-sm w-full sm:w-auto flex items-center justify-center gap-1.5">
+              <span>Subscribe</span> <i class="fas fa-paper-plane text-xs"></i>
             </button>
           </div>
           <p class="text-xs text-slate-400 mt-3">No spam. Unsubscribe anytime.</p>
         </div>
         
         <div class="flex flex-col gap-3.5 text-slate-600 text-sm">
-          <div class="flex items-center gap-3"><i class="fas fa-phone-alt w-6 text-[#1d6ee5]"></i> +1 (888) 234-5678</div>
-          <div class="flex items-center gap-3"><i class="fas fa-envelope w-6 text-[#1d6ee5]"></i> <a href="mailto:von.vergara.399@gmail.com" class="hover:text-[#1d6ee5] transition-colors">von.vergara.399@gmail.com</a></div>
-          <div class="flex items-center gap-3"><i class="fas fa-map-marker-alt w-6 text-[#1d6ee5]"></i> Sto. Nino South Cotabato, Philippines</div>
+          <div class="flex items-center gap-3"><i class="fas fa-phone-alt w-6 text-[#1d6ee5] shrink-0"></i> <span>+1 (888) 234-5678</span></div>
+          <div class="flex items-center gap-3"><i class="fas fa-envelope w-6 text-[#1d6ee5] shrink-0"></i> <a href="mailto:von.vergara.399@gmail.com" class="hover:text-[#1d6ee5] transition-colors break-all">von.vergara.399@gmail.com</a></div>
+          <div class="flex items-center gap-3"><i class="fas fa-map-marker-alt w-6 text-[#1d6ee5] shrink-0"></i> <span>Sto. Nino South Cotabato, Philippines</span></div>
           <div class="flex gap-4 mt-2 text-[#1d6ee5] text-lg">
             <i class="fab fa-linkedin-in hover:scale-115 transition-transform cursor-pointer"></i>
             <i class="fab fa-twitter hover:scale-115 transition-transform cursor-pointer"></i>
@@ -574,15 +651,17 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-white border-t border-slate-100 py-10">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-5">
-        <div class="flex items-center gap-2">
-          <i class="fas fa-tooth text-[#1d6ee5] text-xl"></i>
-          <span class="font-extrabold text-slate-900 text-lg">DentaFlow</span>
-          <span class="text-slate-400 text-xs ml-2">© <?= date('Y') ?> — Intelligent Dental Operating System</span>
+  <footer class="bg-white border-t border-slate-100 py-8 sm:py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-5 text-center md:text-left">
+        <div class="flex flex-col sm:flex-row items-center gap-2">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-tooth text-[#1d6ee5] text-xl"></i>
+            <span class="font-extrabold text-slate-900 text-lg">DentaFlow</span>
+          </div>
+          <span class="text-slate-400 text-xs sm:ml-2">© <?= date('Y') ?> — Intelligent Dental Operating System</span>
         </div>
-        <div class="flex gap-8 text-slate-500 text-xs">
+        <div class="flex flex-wrap justify-center gap-5 sm:gap-8 text-slate-500 text-xs">
           <a href="#" class="hover:text-[#1d6ee5] transition">Privacy</a>
           <a href="#" class="hover:text-[#1d6ee5] transition">Terms</a>
           <a href="#" class="hover:text-[#1d6ee5] transition">Security</a>
@@ -619,6 +698,53 @@
         }, 3600);
       }
 
+      // Mobile menu toggle functionality
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileNavMenu = document.getElementById('mobileNavMenu');
+      const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+      let isMobileMenuOpen = false;
+
+      function toggleMobileMenu(openState) {
+        if (!mobileNavMenu) return;
+        isMobileMenuOpen = openState !== undefined ? openState : !isMobileMenuOpen;
+        if (isMobileMenuOpen) {
+          mobileNavMenu.style.maxHeight = mobileNavMenu.scrollHeight + 50 + 'px';
+          mobileNavMenu.classList.remove('opacity-0', 'border-transparent');
+          mobileNavMenu.classList.add('opacity-100', 'border-slate-100');
+          if (mobileMenuIcon) {
+            mobileMenuIcon.classList.remove('fa-bars');
+            mobileMenuIcon.classList.add('fa-times');
+          }
+          mobileMenuToggle?.setAttribute('aria-expanded', 'true');
+        } else {
+          mobileNavMenu.style.maxHeight = '0px';
+          mobileNavMenu.classList.add('opacity-0', 'border-transparent');
+          mobileNavMenu.classList.remove('opacity-100', 'border-slate-100');
+          if (mobileMenuIcon) {
+            mobileMenuIcon.classList.remove('fa-times');
+            mobileMenuIcon.classList.add('fa-bars');
+          }
+          mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      mobileMenuToggle?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
+      });
+
+      // Close mobile menu when clicking any nav link
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => toggleMobileMenu(false));
+      });
+
+      // Close mobile menu on click outside
+      document.addEventListener('click', (e) => {
+        if (isMobileMenuOpen && mobileNavMenu && !mobileNavMenu.contains(e.target) && !mobileMenuToggle?.contains(e.target)) {
+          toggleMobileMenu(false);
+        }
+      });
+
       // 1. Scroll-Reveal Intersection Observer
       const revealElements = document.querySelectorAll('.reveal-on-scroll');
       if ('IntersectionObserver' in window) {
@@ -645,7 +771,7 @@
       }
 
       function runCounters() {
-        const duration = 2800; // 2.8 seconds of slow, silky deceleration
+        const duration = 2800;
         const startTime = performance.now();
 
         function step(now) {
@@ -684,7 +810,7 @@
         runCounters();
       }
 
-      // 3. 3D Perspective Tilt on Hero Mockup - ultra-gentle & damped
+      // 3. 3D Perspective Tilt on Hero Mockup - only on large desktop screens
       const heroCard = document.getElementById('heroMockupCard');
       const heroWrapper = document.getElementById('heroMockupWrapper');
 
@@ -698,7 +824,6 @@
             const y = e.clientY - rect.top;
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            // Calibrated for slow, subtle, premium 2.5deg max tilt
             const rotateX = ((y - centerY) / centerY) * -2.5;
             const rotateY = ((x - centerX) / centerX) * 2.5;
 
@@ -713,12 +838,23 @@
       }
 
       // 4. CTA and Demo Button Handlers
+      const trialTriggers = document.querySelectorAll('.start-trial-trigger');
+      trialTriggers.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleMobileMenu(false);
+          showMessage('🎉 Welcome to DentaFlow! Sign in with your demo admin account or contact sales.', true);
+          setTimeout(openLoginModal, 600);
+        });
+      });
+
       const demoBtns = Array.from(document.querySelectorAll('button')).filter(btn => 
         btn.innerText.includes('Start free trial') || btn.innerText.includes('Request free demo')
       );
       demoBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
+          toggleMobileMenu(false);
           showMessage('🎉 Welcome to DentaFlow! Sign in with your demo admin account or contact sales.', true);
           setTimeout(openLoginModal, 600);
         });
@@ -727,6 +863,7 @@
       const watchBtn = Array.from(document.querySelectorAll('button')).find(btn => btn.innerText.includes('Watch demo'));
       if(watchBtn) {
         watchBtn.addEventListener('click', () => {
+          toggleMobileMenu(false);
           showMessage('🎬 Interactive walkthrough: log in with admin@gmail.com / password123!', true);
           setTimeout(openLoginModal, 600);
         });
@@ -734,16 +871,14 @@
 
       // 5. Login Modal Controls
       const loginModal = document.getElementById('loginModal');
-      const openLoginModalBtn = document.getElementById('openLoginModal');
       const loginModalPanel = loginModal?.querySelector('.modal-panel');
       const closeLoginModalBtn = document.getElementById('closeLoginModal');
-      const loginForm = document.getElementById('loginForm');
       const loginEmail = document.getElementById('loginEmail');
-      const loginPassword = document.getElementById('loginPassword');
       let isLoginModalClosing = false;
 
       function openLoginModal() {
         if(!loginModal || isLoginModalClosing) return;
+        toggleMobileMenu(false);
         loginModal.classList.remove('hidden');
         loginModal.classList.add('flex');
         document.body.classList.add('overflow-hidden');
@@ -767,7 +902,11 @@
         }, 240);
       }
 
-      openLoginModalBtn?.addEventListener('click', openLoginModal);
+      // Wire all login triggers (header, mobile drawer, etc.)
+      document.querySelectorAll('.open-login-trigger, #openLoginModal').forEach(btn => {
+        btn.addEventListener('click', openLoginModal);
+      });
+
       closeLoginModalBtn?.addEventListener('click', closeLoginModal);
 
       loginModal?.querySelectorAll('[data-close-login-modal]').forEach(element => {
@@ -775,8 +914,12 @@
       });
 
       document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape' && loginModal && !loginModal.classList.contains('hidden')) {
-          closeLoginModal();
+        if(e.key === 'Escape') {
+          if (loginModal && !loginModal.classList.contains('hidden')) {
+            closeLoginModal();
+          } else if (isMobileMenuOpen) {
+            toggleMobileMenu(false);
+          }
         }
       });
 

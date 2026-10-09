@@ -157,6 +157,14 @@ $medicalHistoryConfig = [
     box-shadow: inset 0 -2px 0 #0b77ff;
   }
 
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   .mh-answer-btn {
     min-width: 64px;
     border: 1px solid #d7e7fb;
@@ -333,11 +341,11 @@ $medicalHistoryConfig = [
         </div>
 
         <div class="profile-card overflow-hidden rounded-[24px] border border-white/60">
-          <div class="flex flex-wrap border-b border-slate-200/80 bg-white">
+          <div class="flex overflow-x-auto border-b border-slate-200/80 bg-white no-scrollbar scroll-smooth">
             <?php foreach ($tabs as $tabKey => $tab): ?>
               <a
                 href="<?= htmlspecialchars($tab['href'], ENT_QUOTES, 'UTF-8') ?>?id=<?= urlencode($patient['id']) ?>"
-                class="profile-tab <?= $profileTab === $tabKey ? 'is-active' : '' ?> border-r border-slate-200/80 px-6 py-6 text-[17px] font-medium"
+                class="profile-tab shrink-0 <?= $profileTab === $tabKey ? 'is-active' : '' ?> border-r border-slate-200/80 px-4 py-3.5 sm:px-6 sm:py-5 text-sm sm:text-[16px] font-medium whitespace-nowrap"
               >
                 <?= htmlspecialchars($tab['label'], ENT_QUOTES, 'UTF-8') ?>
               </a>
@@ -357,16 +365,16 @@ $medicalHistoryConfig = [
               </div>
             <?php endif; ?>
 
-            <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div class="mb-6 sm:mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <p class="text-lg font-semibold text-[#0c2340]"><?= htmlspecialchars($currentTabContent['title'], ENT_QUOTES, 'UTF-8') ?></p>
-                <p class="mt-1 text-sm text-slate-400"><?= htmlspecialchars($currentTabContent['subtitle'], ENT_QUOTES, 'UTF-8') ?></p>
+                <p class="text-base sm:text-lg font-semibold text-[#0c2340]"><?= htmlspecialchars($currentTabContent['title'], ENT_QUOTES, 'UTF-8') ?></p>
+                <p class="mt-1 text-xs sm:text-sm text-slate-400"><?= htmlspecialchars($currentTabContent['subtitle'], ENT_QUOTES, 'UTF-8') ?></p>
               </div>
-              <div class="flex flex-col items-end gap-2">
+              <div class="flex flex-col sm:items-end gap-2 w-full sm:w-auto">
                 <button
                   type="button"
                   id="medicalHistorySaveBtn"
-                  class="<?= $profileTab === 'medical_history' ? 'inline-flex' : 'hidden' ?> items-center rounded-xl bg-[#cfe5fb] px-10 py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb]"
+                  class="<?= $profileTab === 'medical_history' ? 'inline-flex' : 'hidden' ?> items-center justify-center rounded-xl bg-[#cfe5fb] px-6 sm:px-10 py-2.5 sm:py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb] w-full sm:w-auto"
                 >
                   Update
                 </button>
@@ -374,7 +382,7 @@ $medicalHistoryConfig = [
                   <button
                     type="button"
                     id="photoAddTrigger"
-                    class="inline-flex items-center rounded-xl bg-[#cfe5fb] px-10 py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb]"
+                    class="inline-flex items-center justify-center rounded-xl bg-[#cfe5fb] px-6 sm:px-10 py-2.5 sm:py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb] w-full sm:w-auto"
                   >
                     Add
                   </button>
@@ -382,7 +390,7 @@ $medicalHistoryConfig = [
                   <button
                     type="button"
                     id="formAddTrigger"
-                    class="inline-flex items-center rounded-xl bg-[#cfe5fb] px-10 py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb]"
+                    class="inline-flex items-center justify-center rounded-xl bg-[#cfe5fb] px-6 sm:px-10 py-2.5 sm:py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb] w-full sm:w-auto"
                   >
                     Add
                   </button>
@@ -390,22 +398,22 @@ $medicalHistoryConfig = [
                   <button
                     type="button"
                     id="appointmentAddTrigger"
-                    class="inline-flex items-center rounded-xl bg-[#cfe5fb] px-10 py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb]"
+                    class="inline-flex items-center justify-center rounded-xl bg-[#cfe5fb] px-6 sm:px-10 py-2.5 sm:py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb] w-full sm:w-auto"
                   >
                     Add
                   </button>
                 <?php elseif ($profileTab !== 'medical_history'): ?>
                   <?php if ($mapUrl !== ''): ?>
-                    <a href="<?= htmlspecialchars($mapUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl bg-[#cfe5fb] px-10 py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb]">
+                    <a href="<?= htmlspecialchars($mapUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl bg-[#cfe5fb] px-6 sm:px-10 py-2.5 sm:py-3 text-sm font-medium text-[#0b77ff] transition duration-200 hover:bg-[#bddbfb] w-full sm:w-auto">
                       Update
                     </a>
                   <?php else: ?>
-                    <span class="inline-flex items-center rounded-xl bg-[#e8f2fd] px-10 py-3 text-sm font-medium text-[#7ca8d8]">
+                    <span class="inline-flex items-center justify-center rounded-xl bg-[#e8f2fd] px-6 sm:px-10 py-2.5 sm:py-3 text-sm font-medium text-[#7ca8d8] w-full sm:w-auto">
                       Update
                     </span>
                   <?php endif; ?>
                 <?php endif; ?>
-                <p class="text-sm text-slate-400">Last Update: <?= htmlspecialchars($createdAt, ENT_QUOTES, 'UTF-8') ?></p>
+                <p class="text-xs sm:text-sm text-slate-400">Last Update: <?= htmlspecialchars($createdAt, ENT_QUOTES, 'UTF-8') ?></p>
               </div>
             </div>
 
@@ -687,7 +695,7 @@ $medicalHistoryConfig = [
                             <span>Updated: <?= htmlspecialchars(date('M d, Y h:i a', strtotime((string) $form['updated_at'])), ENT_QUOTES, 'UTF-8') ?></span>
                           </div>
                         </div>
-                        <div class="grid shrink-0 grid-cols-2 gap-1.5 md:ml-4">
+                        <div class="flex items-center gap-1.5 shrink-0 md:ml-4">
                           <button type="button" class="open-form-view form-action-icon inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700" data-form="<?= $formPayload ?>" title="View form" aria-label="View form">
                             <i data-feather="eye" class="h-4 w-4"></i>
                           </button>
